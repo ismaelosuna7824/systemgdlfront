@@ -1,0 +1,120 @@
+<app-side-menu-broker></app-side-menu-broker>
+<main class="content">
+    <app-nav-bar-broker></app-nav-bar-broker>
+    <div class="row">
+        <div class="col-md-12 col-xl-4">
+            <div class="row" style="padding-bottom: 10px;">
+                <div class="card border-0 shadow">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h2 class="fs-5 fw-bold mb-0">Información General</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <form action="" [formGroup]="registerForm" (ngSubmit)="registerEmpleado()">
+                            <br>
+                            <div class="col-md-12 mb-3">
+                                <div>
+                                    <label for="first_name">Nombre's</label>
+                                    <input class="form-control" id="first_name" type="text" placeholder="" required="" formControlName="nombre">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div>
+                                    <label for="first_name">Apellido's</label>
+                                    <input class="form-control" id="first_name" type="text" placeholder="" required="" formControlName="apellido">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div>
+                                    <label for="first_name">CURP</label>
+                                    <input class="form-control" id="first_name" type="text" placeholder="" required="" formControlName="curp">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div>
+                                    <label for="first_name">RFC</label>
+                                    <input class="form-control" id="first_name" type="text" placeholder="" required="" formControlName="rfc">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div>
+                                    <label for="first_name">num. Seguro Social</label>
+                                    <input class="form-control" id="first_name" type="number" placeholder="Solo Numeros sin guiones" required="" formControlName="numeroSocial">
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" [disabled]="!registerForm.valid">Guardar</button>
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        <div class="col-md-12 col-xl-8 col-sm-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="fs-5 fw-bold mb-0">Empleados</h2>
+                                </div>
+                                <div class="col text-end">
+                                    <input type="text" class="form-control" placeholder="Buscar Empleado" [(ngModel)]="buscaEmp">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y: hidden;">
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="border-bottom" scope="col">Nombre's</th>
+                                    <th class="border-bottom" scope="col">Apellido's</th>
+                                    <th class="border-bottom" scope="col">CURP</th>
+                                    <th class="border-bottom" scope="col">RFC</th>
+                                    <th class="border-bottom" scope="col">num. Seguro Social</th>
+                                    <th class="border-bottom" scope="col">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let emp of empleados | paginate: { itemsPerPage: 9, currentPage: p } | buscar: buscaEmp ">
+                                    <td>{{emp.nombres}}</td>
+                                    <td>{{emp.apellidos}}</td>
+                                    <td>{{emp.curp}}</td>
+                                    <td>{{emp.rfc}}</td>
+                                    <td>{{emp.numSeguro}}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div class="dropdown me-1">
+                                                <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
+                                                Seleccionar
+                                                </button>
+                                                <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuOffset" style="margin: 0px;">
+                                                    <li><a class="dropdown-item rounded-top" (click)="llenaForm(emp)">Actualizar</a></li>
+                                                    <li><a class="dropdown-item"  (click)="eliminarEnpleado(emp)">Eliminar</a></li>
+                                                    
+                                                </ul>
+                                            </div>
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <div>
+                                    <pagination-controls (pageChange)="p = $event" nextLabel="siguiente" previousLabel="atras"></pagination-controls>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
