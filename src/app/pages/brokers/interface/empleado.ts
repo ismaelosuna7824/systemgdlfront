@@ -16,7 +16,7 @@ export interface IDSMO {
 	apellidoMaterno?: string;
 	nombres?: string;
     nombreCompleto?:  string;
-	nuSocial?: string;
+	numSocial?: string;
 	sd?: number;
     salarioInt?: number;
 	curp?: string;
@@ -26,4 +26,21 @@ export interface IDSMO {
 	creditoInfonavidVigente?: string;
 	numeroCredito?: number;
 	montoDescuentoCFVSMFD?: number;
+    fechaAlta?: string;
+    incidencia?: string;
+    fechaBaja?: string;
+
+    salarioBase?: number;
+    claveTrabajador?: string
+    tipoTrabajador?: string 
+    tipoSalario?: string 
+    semanaJornadaReducida?: string 
+    unidadMedicinaFamiliar?: string
+    guia?: string 
+    claveUnica?: string 
+    identificadorFormato?: string
+    digitoVerificadorRP?: string
+    digitoVerificadorNSS?: string
+    terminacion?: string
+    causaBaja?: string 
 }

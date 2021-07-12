@@ -6,7 +6,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
-const uri = 'http://localhost:2005/graphql'; // <-- add the URL of the GraphQL server here
+const uri = 'http://149.28.67.198:2007/graphql'; // <-- add the URL of the GraphQL server here
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
 
   const basic = setContext((operation, context) => ({

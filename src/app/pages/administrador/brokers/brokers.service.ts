@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Subscription } from 'rxjs';
+import { Brokers } from '../interfaces/brokers';
 
 @Injectable({
   providedIn: 'root'
@@ -41,70 +42,94 @@ export class BrokersService {
       });
     });
   }
-  // registerEmpleado(empleado: Empleado){
-  //   return new Promise((resolve, reject)=>{
-  //     const Register = gql`
-  //          mutation registerEmpleado($empleado: EmpleadoInput){
-  //             registerEmpleado(empleado: $empleado){
-  //               status
-  //               message
-  //             }
-  //           }
-  //       `;
-  //       this.apollo.mutate({
-  //       mutation: Register,
-  //       variables: {
-  //         "empleado": {
-  //           "idEmpresa": `${empleado._id}`,
-  //           "nombres": `${empleado.nombres}`,
-  //           "apellidos": `${empleado.apellidos}`,
-  //           "curp": `${empleado.curp}`,
-  //           "rfc": `${empleado.rfc}`,
-  //           "numSeguro": `${empleado.numSeguro}`,
-  //           "status": 1
-  //         }
-  //       }
-  //       }).subscribe(({ data }) =>{
-  //         //console.log(data);
-  //         this.posts = data;
-  //         //console.log(this.posts.registerProduct.product.id);
-  //         resolve (this.posts.registerEmpleado.status);
-  //       }, err =>{
-  //         resolve(false);
-  //       });
-  //   });
-  // }
-  // updateEmpleado(empleado: Empleado){
-  //   return new Promise((resolve, reject)=>{
-  //     const Register = gql`
-  //          mutation updateEmpleado($empleado: EmpleadoInput){
-  //             updateEmpleado(empleado: $empleado){
-  //               status
-  //               message
-  //             }
-  //           }
-  //       `;
-  //       this.apollo.mutate({
-  //       mutation: Register,
-  //       variables: {
-  //         "empleado": {
-  //           "id": `${empleado._id}`,
-  //           "nombres": `${empleado.nombres}`,
-  //           "apellidos": `${empleado.apellidos}`,
-  //           "curp": `${empleado.curp}`,
-  //           "rfc": `${empleado.rfc}`,
-  //           "numSeguro": `${empleado.numSeguro}`,
-  //           "status": empleado.status
-  //         }
-  //       }
-  //       }).subscribe(({ data }) =>{
-  //         //console.log(data);
-  //         this.posts = data;
-  //         //console.log(this.posts.registerProduct.product.id);
-  //         resolve (this.posts.updateEmpleado.status);
-  //       }, err =>{
-  //         resolve(false);
-  //       });
-  //   });
-  // }
+  registerBroker(broker: Brokers){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+           mutation registerBroker($empresa:EmpresaInput){
+              registerEmpresa(empresa: $empresa){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "empresa": {
+            "registroPatronal": `${broker.registroPatronal}`,
+            "broker": `${broker.broker}`,
+            "usuario": `${broker.usuario}`,
+            "contrasena": `${broker.constrasena}`,
+            "status": 1
+          }
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.registerEmpresa.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
+  updateBroker(broker: Brokers){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+           mutation updateEmpresa($empresa:EmpresaInput){
+              updateEmpresa(empresa: $empresa){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "empresa": {
+            "id": `${broker._id}`,
+            "registroPatronal": `${broker.registroPatronal}`,
+            "broker": `${broker.broker}`,
+            "usuario": `${broker.usuario}`,
+            "contrasena": `${broker.constrasena}`
+          }
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.updateEmpresa.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
+  deleteBroker(broker: Brokers){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+           mutation deleteEmpresa($empresa:EmpresaInput){
+              deleteEmpresa(empresa: $empresa){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "empresa": {
+            "id": `${broker._id}`,
+            "status": 0
+          }
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.deleteEmpresa.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
 }

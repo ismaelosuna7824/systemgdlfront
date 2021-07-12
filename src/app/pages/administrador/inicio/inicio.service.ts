@@ -17,6 +17,7 @@ export class InicioService {
       const GET_POST = gql`
       query empresas($idEmpresa: String) {
         movimientos(idEmpresa: $idEmpresa){
+            idEmpleado
             _id
             idEmpresa{
               registroPatronal
@@ -27,7 +28,7 @@ export class InicioService {
             apellidoMaterno
             nombres
             nombreCompleto
-            nuSocial
+            numSocial
             sd
             salarioInt
             curp
@@ -37,6 +38,25 @@ export class InicioService {
             creditoInfonavidVigente
             numeroCredito
             montoDescuentoCFVSMFD
+            idEmpleado
+            fechaAlta
+            incidencia
+            fechaBaja
+            salarioBase
+            claveTrabajador
+            tipoTrabajador
+            tipoSalario
+            semanaJornadaReducida
+            unidadMedicinaFamiliar
+            guia
+            claveUnica
+            identificadorFormato
+            digitoVerificadorRP
+            digitoVerificadorNSS
+            terminacion
+            causaBaja
+            emaMes
+            dias
           }
       }
     `;
@@ -57,6 +77,32 @@ export class InicioService {
        // console.log("entro a un error");
         reject (false);
       });
+    });
+  }
+
+  upadteMovimiento(inputMovimiento: any){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+           mutation upadeMovimiento($movimiento:MovimientoInput){
+            upadteMovimiento(movimiento: $movimiento){
+              status
+              message
+            }
+          }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "movimiento": inputMovimiento
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.upadteMovimiento.status);
+        }, err =>{
+          resolve(false);
+        });
     });
   }
 }

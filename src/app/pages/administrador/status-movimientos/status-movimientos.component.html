@@ -13,39 +13,23 @@
                         </div>
                     </div>
                     <div>
-                        <form action="" [formGroup]="registerForm" (ngSubmit)="registerBroker()">
+                        <form action="">
                             <br>
                             <div class="row">
-                                <div class="col-lg-3 mb-3 col-md-12">
+                                <div class="col-lg-6 mb-3 col-md-12">
                                     <div>
-                                        <label for="">Registro Patronal</label>
-                                        <input type="text" class="form-control" formControlName="registroPatronal">
+                                        <label for="first_name">Estatus</label>
+                                        <input type="text" name="" id="" class="form-control" [(ngModel)]="nombrestatus" [ngModelOptions]="{standalone: true}"  >
                                     </div>
                                 </div>
-                                <div class="col-lg-3 mb-3 col-md-12">
-                                    <div>
-                                        <label for="">Broker</label>
-                                        <input type="text" class="form-control" formControlName="broker">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 mb-3 col-md-12">
-                                    <div>
-                                        <label for="">Usuario</label>
-                                        <input type="text" class="form-control" formControlName="usuario">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 mb-3 col-md-12">
-                                    <div>
-                                        <label for="">Contraseña</label>
-                                        <input type="password" class="form-control" formControlName="contrasena">
-                                    </div>
-                                </div>
-
                                 <div>
-                                    <button class="btn btn-primary">Guardar</button>
+                                    <button class="btn btn-primary" (click)="registerStatus()">Guardar</button>
                                 </div>
-                               
                             </div>
+                            
+                            <!-- <div>
+                                <button class="btn btn-primary"  (click)="buscaBrokers()">Buscar</button>
+                            </div> -->
                             <br>
                         </form>
                     </div>
@@ -59,32 +43,28 @@
                     <div class="card border-0 shadow">
                         <div class="card-header">
                             <div class="row align-items-center">
-                                <div class="col ">
-                                   
+                                <!-- <div class="col">
+                                    <h2 class="fs-5 fw-bold mb-0">Empleados</h2>
+                                    <br>
+                                    <button class="btn btn-primary" (click)="registerIDS()">Dar de alta Emplados en IDSE</button>
                                 </div>
                                 <div class="col text-end">
-                                    <input type="text" class="form-control" placeholder="Buscar broker" [(ngModel)]="buscaBroker" [ngModelOptions]="{standalone: true}" >
-                                </div>
+                                    <input type="text" class="form-control" placeholder="Buscar Empleado" [(ngModel)]="buscaEmp" [ngModelOptions]="{standalone: true}" >
+                                </div> -->
                             </div>
                         </div>
                         <div class="table-responsive" style="overflow-y: hidden;">
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th class="border-bottom text-center">Registro Patronal</th>
-                                    <th class="border-bottom text-center">Broker</th>
-                                    <th class="border-bottom text-center">Usuario</th>
-                                    <th class="border-bottom text-center">Acciones</th>
+                                    <th class="border-bottom">Nombre Estatus</th>
+                                    <th class="border-bottom">Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let emp of brokers | buscar: buscaBroker; let i = index; ">
-                                    
-                                    <td>{{emp.registroPatronal}}</td>
-                                    <td>{{emp.broker}}</td>
-                                    <td>{{emp.usuario}}</td>
-                                    
-                                     <td>
+                                <tr *ngFor="let emp of statusMovimitos">
+                                    <td>{{emp.nombre}}</td>
+                                    <td>
                                         <div class="d-flex">
                                             <div class="dropdown me-1">
                                                 <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
@@ -92,18 +72,19 @@
                                                 </button>
                                                 <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuOffset" style="margin: 0px;">
                                                     <li><a class="dropdown-item rounded-top" (click)="llenaForm(emp)">Actualizar</a></li>
-                                                    <li><a class="dropdown-item"  (click)="eliminarBroker(emp)">Eliminar</a></li>
+                                                    <li><a class="dropdown-item"  (click)="eliminarStatus(emp)">Eliminar</a></li>
                                                     
                                                 </ul>
                                             </div>
                                             
                                         </div>
                                     </td>
+                                 
                                 </tr>
                                 </tbody>
-                                <div>
+                                <!-- <div>
                                     <pagination-controls (pageChange)="p = $event" nextLabel="siguiente" previousLabel="atras"></pagination-controls>
-                                </div>
+                                </div> -->
                             </table>
                         </div>
                     </div>

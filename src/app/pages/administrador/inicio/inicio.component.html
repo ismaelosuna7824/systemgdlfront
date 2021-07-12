@@ -16,7 +16,7 @@
                         <form action="">
                             <br>
                             <div class="row">
-                                <div class="col-6 mb-3">
+                                <div class="col-lg-6 mb-3 col-md-12">
                                     <div>
                                         <label for="first_name">Brokers</label>
                                         <ng-select [(ngModel)]="selectedEmp" [ngModelOptions]="{standalone: true}">
@@ -26,8 +26,19 @@
                                 </div>
                             </div>
                             
-                            <div>
-                                <button class="btn btn-primary"  (click)="buscaBrokers()">Buscar</button>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <button class="btn btn-primary"  (click)="buscaBrokers()">Buscar</button>
+                                </div>
+                                <div class="col-lg-3"> 
+                                    <button class="btn btn-primary" (click)="exportaTXTALTA()">GENERAR SUA ALTA</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" (click)="exportaTXTMODIFICACION()">GENERAR SUA MODIFICACION </button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" (click)="exportaTXTBAJA()">GENERAR SUA BAJA </button>
+                                </div>
                             </div>
                             <br>
                         </form>
@@ -56,57 +67,37 @@
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th class="border-bottom text-center">Tipo de Movimiento</th>
-                                    <th class="border-bottom text-center">Apellido Paterno</th>
-                                    <th class="border-bottom text-center">Apellido Materno</th>
-                                    <th class="border-bottom text-center"><div style="width: 120px; ">Nombres's</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 250px;">Nombre Completo</div></th>
-                                    <th class="border-bottom text-center">Numero de Seguro Social</th>
-                                    <th class="border-bottom text-center"><div style="width: 120px;">SD</div></th>
-                                    <th class="border-bottom text-center">Salario Integrado</th>
-                                    <th class="border-bottom text-center"><div style="width: 300px;">CURP</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 300px;">RFC</div></th>
-                                    <th class="border-bottom text-center">Fecha que se dara el Movimiento</th>
-                                    <th class="border-bottom text-center">Con Aportación a Infonavit</th>
-                                    <th class="border-bottom text-center">Cuanta con credito infonavit vigente?</th>
-                                    <th class="border-bottom text-center">Numero de Credito</th>
-                                    <th class="border-bottom text-center">Monto a descontar CF VSM FD %</th>
-                                    <th class="border-bottom text-center">Eliminar</th>
+                                    <th class="border-bottom text-center">BROKER</th>
+                                    <th class="border-bottom text-center">FECHA RECEPCION</th>
+                                    <th class="border-bottom text-center">NSS</th>
+                                    <th class="border-bottom text-center"><div style="width: 250px;">NOMBRE COMPLETO</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 100px;">CURP</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 60px;">SBC</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 120px;">ESTATUS</div></th>
+                                    <th class="border-bottom text-center">FECHA ALTA</th>
+                                    <th class="border-bottom text-center">INCIDENCIA</th>
+                                    <th class="border-bottom text-center">FECHA DE BAJA</th>
+                                    <th class="border-bottom text-center">DIAS</th>
+                                    <th class="border-bottom text-center">EMA MES</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- <tr *ngFor="let emp of idse | buscar: buscaEmp; let i = index; ">
-                                    <td class="col-12">
-                                        <select name="" id="" class="form-control" [(ngModel)]="emp.tipoMovimiento" [ngModelOptions]="{standalone: true}">
-                                        <option value="ALTA" >ALTA</option>
-                                        <option value="BAJA">BAJA</option>
-                                        <option value="MODIFICACION">MODIFICACIÓN</option>
-                                    </select>
-                                    </td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.apellidoPaterno" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.apellidoMaterno" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nombres" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nombreCompleto" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nuSocial" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.sd" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.salarioInt" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.curp" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.rfc" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="date" class="form-control" [(ngModel)]="emp.fechaMovimiento" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.aportacionInfonavid" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.creditoInfonavidVigente" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.numeroCredito" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.montoDescuentoCFVSMFD" [ngModelOptions]="{standalone: true}"></td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" (click)="eliminarItem(i)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-                                                </svg>
-                                            
-                                          </button>
-                                    </td>
-                                </tr> -->
+                                <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
+                                    <td>{{emp.idEmpresa.registroPatronal}}</td>
+                                    <td>{{emp.fechaMovimiento}}</td>
+                                    <td>{{emp.nuSocial}}</td>
+                                    <td>{{emp.nombreCompleto}}</td>
+                                    <td>{{emp.curp}}</td>
+                                    <td>{{emp.sd}}</td>
+                                    <td>{{emp.tipoMovimiento}}</td>
+                                    <td>{{emp.fechaAlta}}</td>
+                                    <td>{{emp.incidencia}}</td>
+                                    <td>{{emp.fechaBaja}}</td>
+                                    <td>10</td>
+                                    <td>80</td>
+                                    <td><button type="button" class="btn btn-block btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalSubscribe" (click)="llenaForm(emp)">ver toda la informacion</button></td>
+                                 
+                                </tr>
                                 </tbody>
                                 <!-- <div>
                                     <pagination-controls (pageChange)="p = $event" nextLabel="siguiente" previousLabel="atras"></pagination-controls>
@@ -115,6 +106,182 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!---MODAL-->
+    <div class="modal fade" id="modalSubscribe" tabindex="-1" role="dialog" aria-labelledby="modalTitleSubscribe" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content py-xl-4">
+                <div class="modal-body text-center py-3">
+                   <form [formGroup]="registerForm" (ngSubmit)="actualizarMovimiento()">
+                       <div class="row">
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo Movimiento</label>
+                                <select name="" id="" class="form-control" formControlName="tipoMovimiento">
+                                    <option [value]="item.nombre" *ngFor="let item of statusMovimitos">{{item.nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Apellido Paterno</label>
+                                <input type="text" class="form-control" formControlName="apellidoPaterno">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Apellido Materno</label>
+                                <input type="text" class="form-control" formControlName="apellidoMaterno">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Nombres</label>
+                                <input type="text" class="form-control" formControlName="nombres">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Nombre Completo</label>
+                                <input type="text" class="form-control" formControlName="nombreCompleto">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">NSS</label>
+                                <input type="text" class="form-control" formControlName="numSocial">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Salario Diario</label>
+                                <input type="text" class="form-control" formControlName="sd">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Salario Integrado</label>
+                                <input type="text" class="form-control" formControlName="salarioInt">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">CURP</label>
+                                <input type="text" class="form-control" formControlName="curp">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">RFC</label>
+                                <input type="text" class="form-control" formControlName="rfc">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Fecha Movimiento</label>
+                                <input type="date" class="form-control" formControlName="fechaMovimiento">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Aportacion de Infonavid</label>
+                                <input type="text" class="form-control" formControlName="aportacionInfonavid">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Credito Infonavid vigente</label>
+                                <input type="text" class="form-control" formControlName="creditoInfonavidVigente">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Numero de credito</label>
+                                <input type="text" class="form-control" formControlName="numeroCredito">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Monto descuento CFVSMFD</label>
+                                <input type="text" class="form-control" formControlName="montoDescuentoCFVSMFD">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Fecha Alta</label>
+                                <input type="date" class="form-control" formControlName="fechaAlta">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Incidendia</label>
+                                <input type="text" class="form-control" formControlName="incidencia">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Fecha Baja</label>
+                                <input type="date" class="form-control" formControlName="fechaBaja">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Salario Base</label>
+                                <input type="text" class="form-control" formControlName="salarioBase">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Clave Trabajador</label>
+                                <input type="text" class="form-control" formControlName="claveTrabajador">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo Trabajador</label>
+                                <input type="text" class="form-control" formControlName="tipoTrabajador">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo Salario</label>
+                                <input type="text" class="form-control" formControlName="tipoSalario">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Semana Jornada Reducida </label>
+                                <input type="text" class="form-control" formControlName="semanaJornadaReducida">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Unidad Medicina Familiar </label>
+                                <input type="text" class="form-control" formControlName="unidadMedicinaFamiliar">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Guia</label>
+                                <input type="text" class="form-control" formControlName="guia">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Clave Unica</label>
+                                <input type="text" class="form-control" formControlName="claveUnica">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Identificador Formato</label>
+                                <input type="text" class="form-control" formControlName="identificadorFormato">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Identificador RP</label>
+                                <input type="text" class="form-control" formControlName="digitoVerificadorRP">
+                                <br>
+                            </div>
+                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Identificador NSS</label>
+                                <input type="text" class="form-control" formControlName="digitoVerificadorNSS">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Terminacion</label>
+                                <input type="text" class="form-control" formControlName="terminacion">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">EMA MES</label>
+                                <input type="text" class="form-control" formControlName="emaMes">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Dias Trabajados</label>
+                                <input type="text" class="form-control" formControlName="dias">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">causaBaja</label>
+                                <select name="" id="" class="form-control" formControlName="causaBaja">
+                                    <option value="1">Termino de contrato</option>
+                                    <option value="2">Separacion Voluntaria</option>
+                                    <option value="3">Abandono de empleo | Defuncion</option>
+                                    <option value="5">Clausura</option>
+                                    <option value="6">Otra</option>
+                                    <option value="7">Ausentismo</option>
+                                    <option value="8">Resicion de contrato</option>
+                                    <option value="9">Jubilacion | A Pension</option>
+                                </select>
+                               
+                                <br>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary">Actualizar</button>
+                            </div>
+                       </div>
+                   </form>
+                </div>
+                
             </div>
         </div>
     </div>

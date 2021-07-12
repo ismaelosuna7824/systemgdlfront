@@ -1,4 +1,4 @@
-<app-side-menu-broker></app-side-menu-broker>
+<app-side-menu-broker [view]="1"></app-side-menu-broker>
 <main class="content">
     <app-nav-bar-broker></app-nav-bar-broker>
     <div class="row">
@@ -28,9 +28,7 @@
                                     <div>
                                         <label for="first_name">Tipo de Movimietno</label>
                                         <select name="" id="" class="form-control" [(ngModel)]="tipoMovimiento" [ngModelOptions]="{standalone: true}">
-                                            <option value="ALTA" >ALTA</option>
-                                            <option value="BAJA">BAJA</option>
-                                            <option value="MODIFICACION">MODIFICACIÓN</option>
+                                            <option [value]="item.nombre" *ngFor="let item of statusMovimitos">{{item.nombre}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -69,7 +67,7 @@
                                     <th class="border-bottom text-center">Tipo de Movimiento</th>
                                     <th class="border-bottom text-center">Apellido Paterno</th>
                                     <th class="border-bottom text-center">Apellido Materno</th>
-                                    <th class="border-bottom text-center"><div style="width: 120px; ">Nombres's</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 170px; ">Nombres's</div></th>
                                     <th class="border-bottom text-center"><div style="width: 250px;">Nombre Completo</div></th>
                                     <th class="border-bottom text-center">Numero de Seguro Social</th>
                                     <th class="border-bottom text-center"><div style="width: 120px;">SD</div></th>
@@ -81,32 +79,52 @@
                                     <th class="border-bottom text-center">Cuanta con credito infonavit vigente?</th>
                                     <th class="border-bottom text-center">Numero de Credito</th>
                                     <th class="border-bottom text-center">Monto a descontar CF VSM FD %</th>
+                                    <th class="border-bottom text-center">Salario Base</th>
+                                    <th class="border-bottom text-center"><div style="width: 250px;">Clave trabajador</div></th>
+                                    <th class="border-bottom text-center">Tipo Trabajador</th>
+                                    <th class="border-bottom text-center"><div style="width: 250px;">Tipo Salario</div></th>
+                                    <th class="border-bottom text-center">Semana de Jornada Reducida</th>
+                                    <th class="border-bottom text-center">Unidad de Medicina Familiar</th>
+                                    <th class="border-bottom text-center"><div style="width: 250px;">Guía</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 250px;">Clave Unica</div></th>
+                                    <th class="border-bottom text-center">Identificador del Formato</th>
+                                    <th class="border-bottom text-center">Digíto identificador RP</th>
+                                    <th class="border-bottom text-center">Digíto identificador NSS</th>
                                     <th class="border-bottom text-center">Eliminar</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr *ngFor="let emp of idse | buscar: buscaEmp; let i = index; ">
                                     <td class="col-12">
-                                        <select name="" id="" class="form-control" [(ngModel)]="emp.tipoMovimiento" [ngModelOptions]="{standalone: true}">
-                                        <option value="ALTA" >ALTA</option>
-                                        <option value="BAJA">BAJA</option>
-                                        <option value="MODIFICACION">MODIFICACIÓN</option>
+                                    <select name="" id="" class="form-control" [(ngModel)]="emp.tipoMovimiento" [ngModelOptions]="{standalone: true}">
+                                        <option [value]="item.nombre" *ngFor="let item of statusMovimitos">{{item.nombre}}</option>
                                     </select>
                                     </td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.apellidoPaterno" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.apellidoMaterno" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nombres" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nombreCompleto" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.nuSocial" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.sd" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.salarioInt" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.curp" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.rfc" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="date" class="form-control" [(ngModel)]="emp.fechaMovimiento" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.aportacionInfonavid" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]="emp.creditoInfonavidVigente" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.numeroCredito" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input type="number" class="form-control" [(ngModel)]="emp.montoDescuentoCFVSMFD" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.apellidoPaterno" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.apellidoMaterno" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.nombres" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.nombreCompleto" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.numSocial" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.sd" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioInt" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.curp" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.rfc" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="date" class="form-control" [(ngModel)]="emp.fechaMovimiento" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.aportacionInfonavid" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.creditoInfonavidVigente" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.numeroCredito" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.montoDescuentoCFVSMFD" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioBase" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.claveTrabajador" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.tipoTrabajador" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.tipoSalario" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.semanaJornadaReducida" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.unidadMedicinaFamiliar" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.guia" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.claveUnica" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.identificadorFormato" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorRP" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorNSS" [ngModelOptions]="{standalone: true}"></td>
                                     <td>
                                         <button type="button" class="btn btn-danger" (click)="eliminarItem(i)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">

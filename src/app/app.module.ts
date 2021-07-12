@@ -15,6 +15,7 @@ import { AltaIdsComponent } from './pages/brokers/alta-ids/alta-ids.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { InicioComponent } from './pages/administrador/inicio/inicio.component';
 import { BrokersComponent } from './pages/administrador/brokers/brokers.component';
+import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { BrokersComponent } from './pages/administrador/brokers/brokers.componen
     BuscarPipe,
     AltaIdsComponent,
     InicioComponent,
-    BrokersComponent
+    BrokersComponent,
+    StatusMovimientosComponent
   ],
   imports: [
     BrowserModule,
