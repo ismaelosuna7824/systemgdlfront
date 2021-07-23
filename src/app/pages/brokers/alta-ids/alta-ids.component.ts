@@ -74,8 +74,8 @@ export class AltaIdsComponent implements OnInit {
         terminacion: "00000000",
         causaBaja: "",
         tipoJornada: "",
-        umf: "",
-        subdelegacion: ""
+        umf: "000",
+        subdelegacion: "00000"
       });
     }else{
       alerta(false, "error, este empleado ya ha sido agregado a la lista")
