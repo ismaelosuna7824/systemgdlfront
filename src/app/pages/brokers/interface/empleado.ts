@@ -43,4 +43,8 @@ export interface IDSMO {
     digitoVerificadorNSS?: string
     terminacion?: string
     causaBaja?: string 
+    tipoJornada?: string
+    umf?: string
+    subdelegacion?: string
+
 }

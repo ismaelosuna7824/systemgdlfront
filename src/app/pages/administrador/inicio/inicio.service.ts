@@ -20,7 +20,6 @@ export class InicioService {
             idEmpleado
             _id
             idEmpresa{
-              registroPatronal
               broker
             }
             tipoMovimiento
@@ -57,6 +56,15 @@ export class InicioService {
             causaBaja
             emaMes
             dias
+            registroPatronal{
+                _id
+                numeroPatronal
+                nombre
+                registroPatronal
+              }
+              tipoJornada
+              umf
+              subdelegacion
           }
       }
     `;

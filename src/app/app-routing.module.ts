@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrokersComponent } from './pages/administrador/brokers/brokers.component';
 import { InicioComponent } from './pages/administrador/inicio/inicio.component';
+import { PatronalesComponent } from './pages/administrador/patronales/patronales.component';
 import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
 import { AltaIdsComponent } from './pages/brokers/alta-ids/alta-ids.component';
 import { DashboardComponent } from './pages/brokers/dashboard/dashboard.component';
@@ -33,6 +34,9 @@ const routes: Routes = [
       },
       {
         path: 'statusMovimoentos', component: StatusMovimientosComponent
+      },
+      {
+        path: 'patronales', component: PatronalesComponent
       }
     ]
   },

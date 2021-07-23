@@ -26,7 +26,6 @@ export class DashboardService {
             numSeguro
             idEmpresa{
               broker
-              registroPatronal
             }
           }
       }

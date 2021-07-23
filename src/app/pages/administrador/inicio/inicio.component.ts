@@ -61,6 +61,9 @@ export class InicioComponent implements OnInit {
       emaMes: ['', Validators.required],
       dias: ['', Validators.required],
       causaBaja: ['', Validators.required],
+      tipoJornada: ['', Validators.required],
+      umf: ['', Validators.required],
+      subdelegacion: ['', Validators.required]
     });
   }
 
@@ -80,72 +83,179 @@ export class InicioComponent implements OnInit {
   exportaTXTALTA(){
     let Linea:string = "";
     let Archivo: any [] = [];
-    this.isdImss.forEach(e=>{
-      if(e.tipoMovimiento == "ALTA" || e.tipoMovimiento == "Reingreso"){
-      let RegistroPatronal:string = `${e.idEmpresa.registroPatronal}${e.digitoVerificadorRP}${e.numSocial}${e.digitoVerificadorNSS}`;
-      RegistroPatronal = RegistroPatronal.padEnd(35);
-      
-      let Nombre = `${e.curp}${e.apellidoPaterno?.concat("$")}${e.apellidoMaterno?.concat("$")}${e.nombres}`;
-      Nombre = Nombre.padEnd(68);
+    let nTotalRegistros = 0;
+    let SubDelegacion = "";
+    let NumeroSubDelegacion = "";
+    this.isdImss.forEach(item=>{
+      if(item.tipoMovimiento == "ALTA" || item.tipoMovimiento == "Reingreso"){
 
-      let fecha = e.fechaMovimiento.split("-");
-      let Salario = `${e.tipoTrabajador}${e.tipoSalario}${fecha[2]}${fecha[1]}${fecha[0]}${this.agregarCeros(e.sd?.toString())}`;
-      Salario = Salario.padEnd(44);
-      
-      let Final = `${fecha[2]}${fecha[1]}${fecha[0]} ${e.terminacion}`;
-      Final = Final.padEnd(17);
-      
-      Linea = `${RegistroPatronal}${Nombre}${Salario}${Final}\r\n`;
+
+        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        RegistroPatronal = RegistroPatronal.padEnd(49);
+
+        console.log(item.registroPatronal.numeroPatronal );
+
+        let Apellido = item.apellidoMaterno;
+        Apellido = Apellido.padEnd(27);
+
+        let Nombre = item.nombres;
+        Nombre = Nombre.padEnd(27);
+
+        let fecha = item.fechaMovimiento.split("-");
+        let Salario = item.sd + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf;
+        Salario = Salario.padEnd(28);
+
+        SubDelegacion = "08" + item.subdelegacion;
+        NumeroSubDelegacion = item.subdelegacion;
+        SubDelegacion = SubDelegacion.padEnd(18);
+
+        let Curp = item.curp + "9";
+
+
+        Linea = RegistroPatronal +
+                Apellido +
+                Nombre +
+                Salario +
+                SubDelegacion +
+                `${Curp}\r\n`;
+      nTotalRegistros++;
+
       Archivo.push(Linea);
       }
     });
+    
+    let Delimitador = "*************";
+    Delimitador = Delimitador.padEnd(56);
+
+    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString());
+    TotalRegistros = TotalRegistros.padEnd(77);
+
+    SubDelegacion = NumeroSubDelegacion;
+    SubDelegacion = SubDelegacion.padEnd(34);
+    let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
+    Archivo.push(LineaFinal);
+
+
     var fileName = "Altas_Sua.txt";
-    //console.log(Archivo)
-    this.saveTextAsFile(Archivo.toString().replace(",", ""), fileName);
+    //console.log(Archivo.toString().split(',').join(''));
+    this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
   }
   exportaTXTMODIFICACION(){
     let Linea:string = "";
     let Archivo: any [] = [];
-    this.isdImss.forEach(e=>{
-      if(e.tipoMovimiento == "MODIFICACION"){
+    let SubDelegacion = "";
+    let NumeroSubDelegacion = "";
+    let nTotalRegistros = 0;
+    this.isdImss.forEach(item=>{
+      if(item.tipoMovimiento == "MODIFICACION"){
 
-      let fecha = e.fechaMovimiento.split("-");
-      
-      let RegistroPatronal:string = `${e.idEmpresa.registroPatronal}${e.numSocial}${e.tipoSalario}${e.digitoVerificadorNSS}${fecha[2]}${fecha[1]}${fecha[0]}`;
-      RegistroPatronal = RegistroPatronal.padEnd(40);
-    
-      
-      let SALARIO = `${this.agregarCerosNueve(e.sd.toString())}`;
-      
-      Linea = `${RegistroPatronal}${SALARIO}\r\n`;
+        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        RegistroPatronal = RegistroPatronal.padEnd(49);
+
+        let Apellido = item.apellidoMaterno;
+        Apellido = Apellido.padEnd(27);
+
+        let Nombre = item.nombres;
+        Nombre = Nombre.padEnd(27);
+
+        let fecha = item.fechaMovimiento.split("-");
+        let Salario = item.sd + "0000000" + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}`;
+        Salario = Salario.padEnd(28);
+
+        SubDelegacion = "07" + item.subdelegacion;
+        NumeroSubDelegacion = item.subdelegacion;
+        SubDelegacion = SubDelegacion.padEnd(18);
+
+        let Curp = item.curp + "9";
+
+
+        Linea = RegistroPatronal +
+            Apellido +
+            Nombre +
+            Salario +
+            SubDelegacion +
+            `${Curp}\r\n`;
+
+        nTotalRegistros++;
       Archivo.push(Linea);
       }
     });
     var fileName = "MODIFICACION_Sua.txt";
+
+    let Delimitador = "*************";
+    Delimitador = Delimitador.padEnd(56);
+
+    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString()); 
+    TotalRegistros = TotalRegistros.padEnd(77);
+
+    SubDelegacion = NumeroSubDelegacion;
+    SubDelegacion = SubDelegacion.padEnd(34);
+
+    let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
+    Archivo.push(LineaFinal);
     //console.log(Archivo)
-    this.saveTextAsFile(Archivo.toString().replace(",", ""), fileName);
+    this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
   }
   exportaTXTBAJA(){
     let Linea:string = "";
     let Archivo: any [] = [];
-    this.isdImss.forEach(e=>{
-      if(e.tipoMovimiento == "BAJA"){
+    let SubDelegacion = "";
+    let NumeroSubDelegacion = "";
+    let nTotalRegistros = 0;
+    this.isdImss.forEach(item=>{
+      if(item.tipoMovimiento == "BAJA"){
 
-      let fecha = e.fechaMovimiento.split("-");
+        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        RegistroPatronal = RegistroPatronal.padEnd(49);
+
+        let Apellido = item.apellidoMaterno;
+        Apellido = Apellido.padEnd(27);
+
+        let Nombre = item.nombres;
+        Nombre = Nombre.padEnd(42);
+
+        let fecha = item.fechaMovimiento.split("-");
+        let Fecha = `${fecha[2]}${fecha[1]}${fecha[0]}`;
+        Fecha = Fecha.padEnd(13);
+
+        SubDelegacion = "02" + item.subdelegacion;
+        NumeroSubDelegacion = item.subdelegacion;
+        SubDelegacion = SubDelegacion.padEnd(17);
+
+        let CausaBaja = item.causaBaja;
+        CausaBaja = CausaBaja.padEnd(19);
+
+        let final = "9";
+
+
+        Linea = RegistroPatronal +
+            Apellido +
+            Nombre +
+            Fecha +
+            SubDelegacion +
+            CausaBaja +
+            `${final}\r\n`;
+
+        nTotalRegistros++;
       
-      let RegistroPatronal:string = `${e.idEmpresa.registroPatronal}${e.numSocial}${e.tipoSalario}${e.causaBaja}${fecha[2]}${fecha[1]}${fecha[0]}`;
-      RegistroPatronal = RegistroPatronal.padEnd(40);
-    
-      
-      let FINAL = `${e.terminacion}`;
-      
-      Linea = `${RegistroPatronal}${FINAL}\r\n`;
       Archivo.push(Linea);
       }
     });
     var fileName = "BAJAS_Sua.txt";
+
+    let Delimitador = "*************";
+    Delimitador = Delimitador.padEnd(56);
+
+    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString());
+    TotalRegistros = TotalRegistros.padEnd(77);
+
+    SubDelegacion = NumeroSubDelegacion;
+    SubDelegacion = SubDelegacion.padEnd(34);
+
+    let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
+    Archivo.push(LineaFinal);
     //console.log(Archivo)
-    this.saveTextAsFile(Archivo.toString().replace(",", ""), fileName);
+    this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
   }
   saveTextAsFile (data:any, filename:any){
 
@@ -192,6 +302,15 @@ export class InicioComponent implements OnInit {
         } while (i < 9);
       return `${result}${salario}`;
     }
+    agregarCerosSeis(salario:string): string {
+      let result = '';
+        let i = salario.length;
+        do {
+          i = i + 1;
+          result = result + 0;
+        } while (i < 6);
+      return `${result}${salario}`;
+    }
     getStatus(){
       this.statuMoService.getstatusM().then((resp:any)=>{
         this.statusMovimitos = resp;
@@ -200,7 +319,7 @@ export class InicioComponent implements OnInit {
     llenaForm(amp:IDSIMSS){
       
       this.registerForm.controls["tipoMovimiento"].setValue(amp.tipoMovimiento);
-      this.registerForm.controls["apellidoPaterno"].setValue(amp.apellidoMaterno);
+      this.registerForm.controls["apellidoPaterno"].setValue(amp.apellidoPaterno);
       this.registerForm.controls["apellidoMaterno"].setValue(amp.apellidoMaterno);
       this.registerForm.controls["nombres"].setValue(amp.nombres);
       this.registerForm.controls["nombreCompleto"].setValue(amp.nombreCompleto);
@@ -232,6 +351,9 @@ export class InicioComponent implements OnInit {
       this.registerForm.controls["causaBaja"].setValue(amp.causaBaja);
       this.registerForm.controls["emaMes"].setValue(amp.emaMes);
       this.registerForm.controls["dias"].setValue(amp.dias);
+      this.registerForm.controls["tipoJornada"].setValue(amp.tipoJornada);
+      this.registerForm.controls["umf"].setValue(amp.umf);
+      this.registerForm.controls["subdelegacion"].setValue(amp.subdelegacion);
       this.idMovimiento = amp._id;
     }
     actualizarMovimiento(){
@@ -269,11 +391,15 @@ export class InicioComponent implements OnInit {
        terminacion: this.registerForm.value.terminacion,
        emaMes: parseFloat(this.registerForm.value.emaMes),
        causaBaja: this.registerForm.value.causaBaja,
-       dias: parseInt(this.registerForm.value.dias)
+       dias: parseInt(this.registerForm.value.dias),
+       tipoJornada: this.registerForm.value.tipoJornada,
+       umf: this.registerForm.value.umf,
+       subdelegacion: this.registerForm.value.subdelegacion
       }
       this.idseSE.upadteMovimiento(inputMovimiento).then(resp=>{
         if(resp){
           alerta(true, "Actualizado correctamente");
+          this.buscaBrokers();
         }else{
           alerta(false, "ha odurrido un error")
         }

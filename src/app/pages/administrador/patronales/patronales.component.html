@@ -13,37 +13,28 @@
                         </div>
                     </div>
                     <div>
-                        <form action="" [formGroup]="registerForm" (ngSubmit)="registerBroker()">
+                        <form action="" [formGroup]="registerForm" (ngSubmit)="registerPatronal()">
                             <br>
                             <div class="row">
                                 <div class="col-lg-3 mb-3 col-md-12">
                                     <div>
-                                        <label for="">Registro Patronal</label>
-                                        <ng-select [(ngModel)]="idPatronal" [ngModelOptions]="{standalone: true}">
-                                            <ng-option *ngFor="let car of patronales" [value]="car._id">{{car.nombre}}</ng-option>
-                                         </ng-select>
-                                        <label for="" hidden>Registro Patronal</label>
-                                        <input type="text" hidden class="form-control" formControlName="registroPatronal">
+                                        <label for="">Nombre, denominación o razón social:</label>
+                                        <input type="text" class="form-control" formControlName="nombre">
+                                    </div>
+                                </div>
+                                 <div class="col-lg-3 mb-3 col-md-12">
+                                    <div>
+                                        <label for="">Registro Patronal:</label>
+                                        <input type="text" class="form-control" formControlName="registroPatronal">
                                     </div>
                                 </div>
                                 <div class="col-lg-3 mb-3 col-md-12">
                                     <div>
-                                        <label for="">Broker</label>
-                                        <input type="text" class="form-control" formControlName="broker">
+                                        <label for="">Número Patronal de Identificación Electrónica:</label>
+                                        <input type="text" class="form-control" formControlName="numeroPatronal">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 mb-3 col-md-12">
-                                    <div>
-                                        <label for="">Usuario</label>
-                                        <input type="text" class="form-control" formControlName="usuario">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 mb-3 col-md-12">
-                                    <div>
-                                        <label for="">Contraseña</label>
-                                        <input type="password" class="form-control" formControlName="contrasena">
-                                    </div>
-                                </div>
+                                
 
                                 <div>
                                     <button class="btn btn-primary">Guardar</button>
@@ -67,7 +58,7 @@
                                    
                                 </div>
                                 <div class="col text-end">
-                                    <input type="text" class="form-control" placeholder="Buscar broker" [(ngModel)]="buscaBroker" [ngModelOptions]="{standalone: true}" >
+                                    <!-- <input type="text"  class="form-control" placeholder="Buscar broker" [(ngModel)]="buscaBroker" [ngModelOptions]="{standalone: true}" > -->
                                 </div>
                             </div>
                         </div>
@@ -75,18 +66,18 @@
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th class="border-bottom text-center">Nombre, denominación o razón social</th>
                                     <th class="border-bottom text-center">Registro Patronal</th>
-                                    <th class="border-bottom text-center">Broker</th>
-                                    <th class="border-bottom text-center">Usuario</th>
+                                    <th class="border-bottom text-center">Número Patronal de Identificación Electrónica</th>
                                     <th class="border-bottom text-center">Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let emp of brokers | buscar: buscaBroker; let i = index; ">
-                                    
-                                    <td>{{emp.registroPatronal.registroPatronal}}</td>
-                                    <td>{{emp.broker}}</td>
-                                    <td>{{emp.usuario}}</td>
+                                    <!-- | buscar: buscaBroker; let i = index; -->
+                                <tr *ngFor="let emp of patronales">
+                                    <td>{{emp.nombre}}</td>
+                                    <td>{{emp.registroPatronal}}</td>
+                                    <td>{{emp.numeroPatronal}}</td>
                                     
                                      <td>
                                         <div class="d-flex">

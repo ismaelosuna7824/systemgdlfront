@@ -5,6 +5,14 @@ export interface Brokers {
     usuario?: string;
     status?: number;
     constrasena?: string;
+    patronal?: registroP;
+}
+
+export interface registroP {
+    _id: string;
+    nombre: string;
+    numeroPatronal: string;
+    registroPatronal: string;
 }
 
 export interface IDSIMSS {
@@ -43,6 +51,10 @@ export interface IDSIMSS {
     terminacion?: string
     causaBaja?: string
     dias?: number
+    tipoJornada?: string; ///agregar estos campos
+    umf: string; ///agregar estos campos
+    subdelegacion: string ///agregar estos campos
+    registroPatronal?: registroP
 }
 
 export interface statusMovimiento {

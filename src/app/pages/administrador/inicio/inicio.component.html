@@ -83,9 +83,9 @@
                                 </thead>
                                 <tbody>
                                 <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
-                                    <td>{{emp.idEmpresa.registroPatronal}}</td>
+                                    <td>{{emp.idEmpresa.broker}}</td>
                                     <td>{{emp.fechaMovimiento}}</td>
-                                    <td>{{emp.nuSocial}}</td>
+                                    <td>{{emp.numSocial}}</td>
                                     <td>{{emp.nombreCompleto}}</td>
                                     <td>{{emp.curp}}</td>
                                     <td>{{emp.sd}}</td>
@@ -93,8 +93,8 @@
                                     <td>{{emp.fechaAlta}}</td>
                                     <td>{{emp.incidencia}}</td>
                                     <td>{{emp.fechaBaja}}</td>
-                                    <td>10</td>
-                                    <td>80</td>
+                                    <td>{{emp.dias}}</td>
+                                    <td>{{emp.emaMes}}</td>
                                     <td><button type="button" class="btn btn-block btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalSubscribe" (click)="llenaForm(emp)">ver toda la informacion</button></td>
                                  
                                 </tr>
@@ -118,7 +118,7 @@
                        <div class="row">
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Tipo Movimiento</label>
-                                <select name="" id="" class="form-control" formControlName="tipoMovimiento">
+                                <select name="" id="" class="form-select" formControlName="tipoMovimiento">
                                     <option [value]="item.nombre" *ngFor="let item of statusMovimitos">{{item.nombre}}</option>
                                 </select>
                             </div>
@@ -208,13 +208,24 @@
                                 <br>
                             </div>
                             <hr>
+                           
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Tipo Trabajador</label>
-                                <input type="text" class="form-control" formControlName="tipoTrabajador">
+                                <select name="" id="" class="form-select" formControlName="tipoTrabajador">
+                                    <option value="1">Permanente</option>
+                                    <option value="2">Eventual</option>
+                                    <option value="3">Eventual Construccion</option>
+                                </select>
+                                <br>
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Tipo Salario</label>
-                                <input type="text" class="form-control" formControlName="tipoSalario">
+                                <select name="" id="" class="form-select" formControlName="tipoSalario">
+                                    <option value="0">Fijo</option>
+                                    <option value="1">Variable</option>
+                                    <option value="2">Mixto</option>
+                                </select>
+                                <br>
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Semana Jornada Reducida </label>
@@ -262,7 +273,7 @@
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">causaBaja</label>
-                                <select name="" id="" class="form-control" formControlName="causaBaja">
+                                <select name="" id="" class="form-select" formControlName="causaBaja">
                                     <option value="1">Termino de contrato</option>
                                     <option value="2">Separacion Voluntaria</option>
                                     <option value="3">Abandono de empleo | Defuncion</option>
@@ -274,6 +285,28 @@
                                 </select>
                                
                                 <br>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo de Jornada</label>
+                                <select name="" id="" class="form-select" formControlName="tipoJornada">
+                                    <option value="0">Jornada Completa</option>
+                                    <option value="1"> 1 - numero de dias trabajados</option>
+                                    <option value="2"> 2 - numero de dias trabajados</option>
+                                    <option value="3"> 3 - numero de dias trabajados</option>
+                                    <option value="4"> 4 - numero de dias trabajados</option>
+                                    <option value="5"> 5 - numero de dias trabajados</option>
+                                    <option value="6">menos de un dia trabajado</option>
+                                </select>
+                               
+                                <br>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">UMF</label>
+                                <input type="text" class="form-control" formControlName="umf">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Sub Delegación</label>
+                                <input type="text" class="form-control" formControlName="subdelegacion">
                             </div>
                             <div>
                                 <button class="btn btn-primary">Actualizar</button>

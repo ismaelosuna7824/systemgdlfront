@@ -72,7 +72,10 @@ export class AltaIdsComponent implements OnInit {
         digitoVerificadorRP: "",
         digitoVerificadorNSS: "",
         terminacion: "00000000",
-        causaBaja: ""
+        causaBaja: "",
+        tipoJornada: "",
+        umf: "",
+        subdelegacion: ""
       });
     }else{
       alerta(false, "error, este empleado ya ha sido agregado a la lista")

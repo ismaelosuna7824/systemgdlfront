@@ -17,13 +17,18 @@ export class BrokersService {
     return new Promise((resolve, reject)=>{
       const GET_POST = gql`
       query empresas {
-        empresas {
-            registroPatronal
-            broker
-            _id
-            usuario
-            status
+        empresas{
+        registroPatronal{
+        _id
+        nombre
+        numeroPatronal
+        registroPatronal
           }
+          broker
+          _id
+          usuario
+          status
+        }
       }
     `;
     this.querySubscription = this.apollo.watchQuery<any>({
@@ -67,7 +72,7 @@ export class BrokersService {
           //console.log(data);
           this.posts = data;
           //console.log(this.posts.registerProduct.product.id);
-          resolve (this.posts.registerEmpresa.status);
+          resolve ({status: this.posts.registerEmpresa.status, idBroker: this.posts.registerEmpresa.message });
         }, err =>{
           resolve(false);
         });

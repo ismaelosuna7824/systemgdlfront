@@ -16,6 +16,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { InicioComponent } from './pages/administrador/inicio/inicio.component';
 import { BrokersComponent } from './pages/administrador/brokers/brokers.component';
 import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
+import { PatronalesComponent } from './pages/administrador/patronales/patronales.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { StatusMovimientosComponent } from './pages/administrador/status-movimie
     AltaIdsComponent,
     InicioComponent,
     BrokersComponent,
-    StatusMovimientosComponent
+    StatusMovimientosComponent,
+    PatronalesComponent
   ],
   imports: [
     BrowserModule,

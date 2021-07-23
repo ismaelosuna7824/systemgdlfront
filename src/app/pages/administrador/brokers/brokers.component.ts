@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { alerta, AlertaElimina } from 'src/app/lib/alert';
 import { Brokers } from '../interfaces/brokers';
+import { PatronalService } from '../patronales/patronal.service';
+import { PatronalInput } from '../patronales/patronales';
 import { BrokersService } from './brokers.service';
 
 @Component({
@@ -15,11 +17,16 @@ export class BrokersComponent implements OnInit {
   brokers: Brokers[] = [];
   p:any;
   buscaBroker:string = "";
-  constructor(private formBuilder: FormBuilder, private brokerService: BrokersService) { }
+  patronales: PatronalInput[] = [];
+  idPatronal: string = "";
+  constructor(private formBuilder: FormBuilder, private brokerService: BrokersService, private patronalService: PatronalService) { }
 
   ngOnInit(): void {
     this.initForm();
     this.getBrokets();
+    this.getPatronales();
+    // const ab = this.getPatronalId('60f9e79daf0edd44cc8d6745');
+     //this.getPatronalId('60f9e79daf0edd44cc8d6745')
   }
 
   initForm(){
@@ -32,7 +39,7 @@ export class BrokersComponent implements OnInit {
   }
   registerBroker(){
     let brokerInput:Brokers = {
-      registroPatronal: this.registerForm.value.registroPatronal,
+      registroPatronal: "",
       broker: this.registerForm.value.broker,
       usuario: this.registerForm.value.usuario,
       constrasena: this.registerForm.value.contrasena,
@@ -40,22 +47,52 @@ export class BrokersComponent implements OnInit {
       
     }
     if(this.idBroker == ""){
-        this.brokerService.registerBroker(brokerInput).then(resp=>{
-          if(resp){
-            alerta(true, "Broker Agregago correctamente");
-            this.registerForm.reset();
-            this.getBrokets();
-          }else{
-            alerta(false, "Ha ocurrido un error");
-          }
-        })
+        if(this.registerForm.value.broker == "" || this.registerForm.value.usuario == "" || this.registerForm.value.contrasena == "" || this.idPatronal == "")
+        {
+          alerta(false, "faltan campos por llenar")
+        }
+        else{
+          this.brokerService.registerBroker(brokerInput).then((resp:any)=>{
+            if(resp.status){
+              let patronalBrokerInput = {
+                  idBroker:  resp.idBroker,
+                  idPatronal: this.idPatronal,
+                  status: 1
+              }
+              this.patronalService.registerPatronalBroker(patronalBrokerInput).then(resp=>{
+                  if(resp){
+                    alerta(true, "Broker Agregago correctamente");
+                    this.registerForm.reset();
+                    this.getBrokets();
+                  }
+              })
+             
+            }else{
+              alerta(false, "Ha ocurrido un error");
+            }
+          })
+        }
     }else{
       this.brokerService.updateBroker(brokerInput).then(resp=>{
         if(resp){
-          alerta(true, "Se ha actualizado el broker correctamente");
-          this.registerForm.reset();
-          this.idBroker = "";
-          this.getBrokets();
+          
+          
+          this.patronalService.getsPatronalID(this.idBroker).then((resp:any)=>{
+            let inputP = {
+              id: resp._id,
+              idBroker: "si",
+              idPatronal: this.idPatronal
+            }
+            this.patronalService.upadtePatronalBroker(inputP).then(resp=>{
+              alerta(true, "Se ha actualizado el broker correctamente");
+              this.registerForm.reset();
+              this.getBrokets();
+              this.idBroker = "";
+              this.idPatronal = "";
+            });
+            //console.log(resp._id);
+          })
+         
         }else{
           alerta(false, "Ha ocurrido un error");
         }
@@ -68,11 +105,13 @@ export class BrokersComponent implements OnInit {
       this.brokers = resp;
     });
   }
-  llenaForm(broker: Brokers){
+  llenaForm(broker: any){
     this.idBroker = broker._id || "";
+    this.idPatronal = broker.registroPatronal._id || "";
     this.registerForm.controls['registroPatronal'].setValue(broker.registroPatronal);
     this.registerForm.controls['broker'].setValue(broker.broker);
     this.registerForm.controls['usuario'].setValue(broker.usuario);
+    //console.log(broker);
   }
   eliminarBroker(broker: Brokers){
       let inputBroker: Brokers = {
@@ -92,5 +131,16 @@ export class BrokersComponent implements OnInit {
         }
       })
   }
-
+  getPatronales(){
+    this.patronalService.getsPatronales().then((resp:any)=>{
+      this.patronales = resp;
+    });
+  }
+  getPatronalId(id:string): string{
+    // this.patronalService.getsPatronalID(id).then(resp=>{
+    //   console.log(resp);
+    // })
+    return "hola;";
+    
+  }
 }
