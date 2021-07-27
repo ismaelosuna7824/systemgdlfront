@@ -62,9 +62,9 @@ export class InicioService {
                 nombre
                 registroPatronal
               }
-              tipoJornada
-              umf
-              subdelegacion
+            tipoJornada
+            umf
+            subdelegacion
           }
       }
     `;

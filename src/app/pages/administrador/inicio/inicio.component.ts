@@ -102,12 +102,12 @@ export class InicioComponent implements OnInit {
         Nombre = Nombre.padEnd(27);
 
         let fecha = item.fechaMovimiento.split("-");
-        let Salario = this.nuevoSalario(item.sd.toString())  + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf;
+        let Salario = this.nuevoSalario(item.sd.toString())  + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf ;
         Salario = Salario.padEnd(28);
 
         SubDelegacion = "08" + item.subdelegacion;
         NumeroSubDelegacion = item.subdelegacion;
-        SubDelegacion = SubDelegacion.padEnd(18);
+        SubDelegacion = SubDelegacion.padEnd(17);
 
         let Curp = item.curp + "9";
 
@@ -121,8 +121,11 @@ export class InicioComponent implements OnInit {
       nTotalRegistros++;
 
       Archivo.push(Linea);
+
+      //alert("el tipo es " + item.tipoTrabajador)
       }
     });
+    
     
     let Delimitador = "*************";
     Delimitador = Delimitador.padEnd(56);
