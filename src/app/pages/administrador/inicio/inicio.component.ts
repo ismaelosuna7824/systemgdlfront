@@ -93,7 +93,7 @@ export class InicioComponent implements OnInit {
         let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
-        console.log(item.registroPatronal.numeroPatronal );
+        //console.log(item.registroPatronal.numeroPatronal );
 
         let Apellido = item.apellidoMaterno;
         Apellido = Apellido.padEnd(27);
@@ -102,7 +102,7 @@ export class InicioComponent implements OnInit {
         Nombre = Nombre.padEnd(27);
 
         let fecha = item.fechaMovimiento.split("-");
-        let Salario = item.sd + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf;
+        let Salario = this.nuevoSalario(item.sd.toString())  + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf;
         Salario = Salario.padEnd(28);
 
         SubDelegacion = "08" + item.subdelegacion;
@@ -127,7 +127,7 @@ export class InicioComponent implements OnInit {
     let Delimitador = "*************";
     Delimitador = Delimitador.padEnd(56);
 
-    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString());
+    let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString());
     TotalRegistros = TotalRegistros.padEnd(77);
 
     SubDelegacion = NumeroSubDelegacion;
@@ -159,7 +159,7 @@ export class InicioComponent implements OnInit {
         Nombre = Nombre.padEnd(27);
 
         let fecha = item.fechaMovimiento.split("-");
-        let Salario = item.sd + "0000000" + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}`;
+        let Salario = this.nuevoSalario(item.sd.toString()) + "0000000" + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}`;
         Salario = Salario.padEnd(28);
 
         SubDelegacion = "07" + item.subdelegacion;
@@ -185,7 +185,7 @@ export class InicioComponent implements OnInit {
     let Delimitador = "*************";
     Delimitador = Delimitador.padEnd(56);
 
-    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString()); 
+    let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString()); 
     TotalRegistros = TotalRegistros.padEnd(77);
 
     SubDelegacion = NumeroSubDelegacion;
@@ -246,7 +246,7 @@ export class InicioComponent implements OnInit {
     let Delimitador = "*************";
     Delimitador = Delimitador.padEnd(56);
 
-    let TotalRegistros = this.agregarCerosSeis(nTotalRegistros.toString());
+    let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString());
     TotalRegistros = TotalRegistros.padEnd(77);
 
     SubDelegacion = NumeroSubDelegacion;
@@ -284,33 +284,7 @@ export class InicioComponent implements OnInit {
           }
     }
 
-    agregarCeros(salario:string): string {
-      let result = '';
-        let i = salario.length;
-        do {
-          i = i + 1;
-          result = result + 0;
-        } while (i < 7);
-      return `${result}${salario}`;
-    }
-    agregarCerosNueve(salario:string): string {
-      let result = '';
-        let i = salario.length;
-        do {
-          i = i + 1;
-          result = result + 0;
-        } while (i < 9);
-      return `${result}${salario}`;
-    }
-    agregarCerosSeis(salario:string): string {
-      let result = '';
-        let i = salario.length;
-        do {
-          i = i + 1;
-          result = result + 0;
-        } while (i < 6);
-      return `${result}${salario}`;
-    }
+    
     getStatus(){
       this.statuMoService.getstatusM().then((resp:any)=>{
         this.statusMovimitos = resp;
@@ -405,6 +379,15 @@ export class InicioComponent implements OnInit {
         }
       })
       
+    }
+
+    nuevoSalario(salario:string):string{
+      if(salario.includes(".")){
+          return salario.replace(".", "").padStart(6, "000000");
+          //console.log(nuevos);
+      }else{
+          return salario.padStart(6, "000000");
+      }
     }
 
 }

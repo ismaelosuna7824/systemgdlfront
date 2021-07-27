@@ -62,8 +62,8 @@ export class AltaIdsComponent implements OnInit {
         fechaBaja: "",
         salarioBase: 0,
         claveTrabajador: "",
-        tipoTrabajador: "",
-        tipoSalario: "",
+        tipoTrabajador: "1",
+        tipoSalario: "0",
         semanaJornadaReducida: "",
         unidadMedicinaFamiliar: "",
         guia: "",
@@ -73,7 +73,7 @@ export class AltaIdsComponent implements OnInit {
         digitoVerificadorNSS: "",
         terminacion: "00000000",
         causaBaja: "",
-        tipoJornada: "",
+        tipoJornada: "0",
         umf: "000",
         subdelegacion: "00000"
       });
