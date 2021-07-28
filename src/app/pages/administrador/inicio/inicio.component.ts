@@ -181,7 +181,11 @@ export class InicioComponent implements OnInit {
     let statusActualizar:any[] = [];
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "MODIFICACION"){
-        statusActualizar.push(item._id);
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
+
+        }else{
+
+          statusActualizar.push(item._id);
         let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
@@ -211,6 +215,8 @@ export class InicioComponent implements OnInit {
 
         nTotalRegistros++;
       Archivo.push(Linea);
+        }
+        
       }
     });
     var fileName = "MODIFICACION_Sua.txt";
@@ -228,6 +234,11 @@ export class InicioComponent implements OnInit {
     Archivo.push(LineaFinal);
     //console.log(Archivo)
     this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
+      if(resp){
+        alerta(true, "archivo generado")
+      }
+    })
      
   }
   exportaTXTBAJA(){
@@ -237,43 +248,49 @@ export class InicioComponent implements OnInit {
     let NumeroSubDelegacion = "";
     let nTotalRegistros = 0;
     let NuevoRegostroPatronal = this.idPatronal;
+    let statusActualizar:any[] = [];
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "BAJA"){
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
 
-        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
-        RegistroPatronal = RegistroPatronal.padEnd(49);
-
-        let Apellido = item.apellidoMaterno;
-        Apellido = Apellido.padEnd(27);
-
-        let Nombre = item.nombres;
-        Nombre = Nombre.padEnd(42);
-
-        let fecha = item.fechaMovimiento.split("-");
-        let Fecha = `${fecha[2]}${fecha[1]}${fecha[0]}`;
-        Fecha = Fecha.padEnd(13);
-
-        SubDelegacion = "02" + item.subdelegacion;
-        NumeroSubDelegacion = item.subdelegacion;
-        SubDelegacion = SubDelegacion.padEnd(17);
-
-        let CausaBaja = item.causaBaja;
-        CausaBaja = CausaBaja.padEnd(19);
-
-        let final = "9";
-
-
-        Linea = RegistroPatronal +
-            Apellido +
-            Nombre +
-            Fecha +
-            SubDelegacion +
-            CausaBaja +
-            `${final}\r\n`;
-
-        nTotalRegistros++;
-      
-      Archivo.push(Linea);
+        }else{
+          statusActualizar.push(item._id);
+          let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
+          RegistroPatronal = RegistroPatronal.padEnd(49);
+  
+          let Apellido = item.apellidoMaterno;
+          Apellido = Apellido.padEnd(27);
+  
+          let Nombre = item.nombres;
+          Nombre = Nombre.padEnd(42);
+  
+          let fecha = item.fechaMovimiento.split("-");
+          let Fecha = `${fecha[2]}${fecha[1]}${fecha[0]}`;
+          Fecha = Fecha.padEnd(13);
+  
+          SubDelegacion = "02" + item.subdelegacion;
+          NumeroSubDelegacion = item.subdelegacion;
+          SubDelegacion = SubDelegacion.padEnd(17);
+  
+          let CausaBaja = item.causaBaja;
+          CausaBaja = CausaBaja.padEnd(19);
+  
+          let final = "9";
+  
+  
+          Linea = RegistroPatronal +
+              Apellido +
+              Nombre +
+              Fecha +
+              SubDelegacion +
+              CausaBaja +
+              `${final}\r\n`;
+  
+          nTotalRegistros++;
+        
+          Archivo.push(Linea);
+        }
+        
       }
     });
     var fileName = "BAJAS_Sua.txt";
@@ -291,6 +308,11 @@ export class InicioComponent implements OnInit {
     Archivo.push(LineaFinal);
     //console.log(Archivo)
     this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
+      if(resp){
+        alerta(true, "archivo generado")
+      }
+    })
   }
   saveTextAsFile (data:any, filename:any){
 
