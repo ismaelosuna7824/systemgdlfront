@@ -18,6 +18,7 @@ export interface registroP {
 export interface IDSIMSS {
     _id?: string;
     idEmpresa?: Brokers
+    idEmpleado?: string;
     tipoMovimiento?: string;
 	apellidoPaterno?: string;
 	apellidoMaterno?: string;

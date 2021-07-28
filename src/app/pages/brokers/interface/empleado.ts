@@ -17,7 +17,7 @@ export interface IDSMO {
 	nombres?: string;
     nombreCompleto?:  string;
 	numSocial?: string;
-	sd?: number;
+	sd?: string;
     salarioInt?: number;
 	curp?: string;
     rfc?: string;
@@ -46,5 +46,6 @@ export interface IDSMO {
     tipoJornada?: string
     umf?: string
     subdelegacion?: string
+    status: number
 
 }

@@ -6,6 +6,7 @@ import { PatronalesComponent } from './pages/administrador/patronales/patronales
 import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
 import { AltaIdsComponent } from './pages/brokers/alta-ids/alta-ids.component';
 import { DashboardComponent } from './pages/brokers/dashboard/dashboard.component';
+import { MovimientoBrokersComponent } from './pages/brokers/movimiento-brokers/movimiento-brokers.component';
 import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
@@ -20,6 +21,9 @@ const routes: Routes = [
       },
       {
         path: 'alta-ids', component: AltaIdsComponent
+      },
+      {
+        path: 'movimientos', component: MovimientoBrokersComponent
       }
     ]
   },

@@ -8,7 +8,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 const uri = 'http://149.28.67.198:2007/graphql'; // <-- add the URL of the GraphQL server here
 
-//const uri = 'http://localhost:2005/graphql';
+//const uri = 'http://localhost:2007/graphql';
 
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {

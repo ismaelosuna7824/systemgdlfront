@@ -38,6 +38,12 @@ export class AltaIdsComponent implements OnInit {
     const emp:Empleado[] = this.empleados.filter(obj => obj._id === this.selectedEmp);
     const apellidos = emp[0].apellidos?.split(" ") || "";
     const buscaEmp = this.idse.filter(ob => ob.idEmpleado === emp[0]._id);
+    let  today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    let newDate = yyyy + '-' + mm + '-' + dd;
     if(buscaEmp.length == 0){
       this.idse.push({
         idEmpleado: emp[0]._id,
@@ -48,11 +54,11 @@ export class AltaIdsComponent implements OnInit {
         nombres: emp[0].nombres?.toUpperCase(),
         nombreCompleto: `${emp[0].nombres?.toUpperCase()} ${emp[0].apellidos?.toUpperCase()}`,
         numSocial: emp[0].numSeguro?.toUpperCase(),
-        sd: 0,
+        sd: "0",
         salarioInt: 0,
         curp: emp[0].curp?.toUpperCase(),
         rfc: emp[0].rfc?.toUpperCase(),
-        fechaMovimiento: "",
+        fechaMovimiento: `${newDate}`,
         aportacionInfonavid: "",
         creditoInfonavidVigente: "",
         numeroCredito: 0,
@@ -75,7 +81,8 @@ export class AltaIdsComponent implements OnInit {
         causaBaja: "",
         tipoJornada: "0",
         umf: "000",
-        subdelegacion: "00000"
+        subdelegacion: "00000",
+        status: 0
       });
     }else{
       alerta(false, "error, este empleado ya ha sido agregado a la lista")
@@ -87,6 +94,9 @@ export class AltaIdsComponent implements OnInit {
     //console.log(this.idse)
   }
   registerIDS(){
+    for (const key in this.idse) {
+        this.idse[key].sd = parseFloat(this.idse[key].sd).toFixed(2);
+    }
     this.idsService.registerIds(this.idse).then(resp=>{
       if(resp){
         alerta(true, "Registro completado correctamente");

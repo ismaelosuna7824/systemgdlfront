@@ -17,6 +17,7 @@ import { InicioComponent } from './pages/administrador/inicio/inicio.component';
 import { BrokersComponent } from './pages/administrador/brokers/brokers.component';
 import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
 import { PatronalesComponent } from './pages/administrador/patronales/patronales.component';
+import { MovimientoBrokersComponent } from './pages/brokers/movimiento-brokers/movimiento-brokers.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PatronalesComponent } from './pages/administrador/patronales/patronales
     InicioComponent,
     BrokersComponent,
     StatusMovimientosComponent,
-    PatronalesComponent
+    PatronalesComponent,
+    MovimientoBrokersComponent
   ],
   imports: [
     BrowserModule,

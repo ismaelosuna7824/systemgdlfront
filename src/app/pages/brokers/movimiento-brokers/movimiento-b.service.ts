@@ -5,18 +5,16 @@ import { Subscription } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class InicioService {
-
+export class MovimientoBService {
   loading: boolean;
   posts: any;
   private querySubscription: Subscription;
   constructor(private apollo: Apollo) { }
-
-  getBrokers(idEmpresd:string){
+  getBrokers(fecha:string){
     return new Promise((resolve, reject)=>{
       const GET_POST = gql`
-      query empresas($idEmpresa: String) {
-        movimientos(idEmpresa: $idEmpresa){
+      query empresas($fecha: String) {
+        movimientosFecha(fecha: $fecha){
             idEmpleado
             _id
             idEmpresa{
@@ -73,13 +71,14 @@ export class InicioService {
       query: GET_POST,
       fetchPolicy: "network-only",
       variables:{
-        idEmpresa: idEmpresd
+        fecha: fecha
       }
     })
       .valueChanges
       .subscribe( ({ data, loading }) => {
         this.loading = loading;
-        this.posts = data.movimientos;
+        this.posts = data.movimientosFecha;
+        console.log(fecha)
         resolve(this.posts);
       }, error=> {
         //console.log(error);
@@ -88,58 +87,4 @@ export class InicioService {
       });
     });
   }
-
-  upadteMovimiento(inputMovimiento: any){
-    return new Promise((resolve, reject)=>{
-      const Register = gql`
-           mutation upadeMovimiento($movimiento:MovimientoInput){
-            upadteMovimiento(movimiento: $movimiento){
-              status
-              message
-            }
-          }
-        `;
-        this.apollo.mutate({
-        mutation: Register,
-        variables: {
-          "movimiento": inputMovimiento
-        }
-        }).subscribe(({ data }) =>{
-          //console.log(data);
-          this.posts = data;
-          //console.log(this.posts.registerProduct.product.id);
-          resolve (this.posts.upadteMovimiento.status);
-        }, err =>{
-          resolve(false);
-        });
-    });
-  }
-  updateStausIsd(data: any){
-    return new Promise((resolve, reject)=>{
-      const Register = gql`
-           mutation updateMovimientoArray($movimiento: arrayUpdateMovimiento){
-              upadteStatusMovimiento(movimiento: $movimiento){
-                status
-                message
-              }
-            }
-        `;
-        this.apollo.mutate({
-        mutation: Register,
-        variables: {
-          "movimiento": {
-            "idMovimiento": data
-          }
-        }
-        }).subscribe(({ data }) =>{
-          //console.log(data);
-          this.posts = data;
-          //console.log(this.posts.registerProduct.product.id);
-          resolve (this.posts.upadteStatusMovimiento.status);
-        }, err =>{
-          resolve(false);
-        });
-    });
-  }
-  
 }

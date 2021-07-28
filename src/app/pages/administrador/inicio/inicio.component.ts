@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { alerta } from 'src/app/lib/alert';
 import { BrokersService } from '../brokers/brokers.service';
 import { Brokers, IDSIMSS, statusMovimiento } from '../interfaces/brokers';
+import { PatronalService } from '../patronales/patronal.service';
+import { PatronalInput } from '../patronales/patronales';
 import { StatusmovimientosService } from '../status-movimientos/statusmovimientos.service';
 import { InicioService } from './inicio.service';
 
@@ -18,13 +20,16 @@ export class InicioComponent implements OnInit {
   buscaMovimiento: string = "";
   registerForm: FormGroup;
   idMovimiento: string = "";
+  patronales: PatronalInput[] = [];
   statusMovimitos: statusMovimiento[] = [];
-  constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService) { }
+  idPatronal: string = "";
+  constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService, private patronalService: PatronalService) { }
 
   ngOnInit(): void {
     this.getBrokers()
     this.getStatus();
     this.initForm();
+    this.getPatronales();
   }
   initForm(){
     this.registerForm = this.formBuilder.group({
@@ -74,10 +79,18 @@ export class InicioComponent implements OnInit {
   }
 
   buscaBrokers(){
-    this.idseSE.getBrokers(this.selectedEmp).then((resp:any)=>{
-      this.isdImss = resp;
-      console.log(resp);
-    });
+
+    const validaDuplicado = this.isdImss.filter(e => e.idEmpresa._id === this.selectedEmp);
+
+    if(validaDuplicado.length == 0){
+      this.idseSE.getBrokers(this.selectedEmp).then((resp:any)=>{
+        this.isdImss.push(... resp);
+        // console.log(resp);
+      });
+    }else{
+     
+    }
+    
   }
 
   exportaTXTALTA(){
@@ -86,11 +99,19 @@ export class InicioComponent implements OnInit {
     let nTotalRegistros = 0;
     let SubDelegacion = "";
     let NumeroSubDelegacion = "";
+
+    let NuevoRegostroPatronal = this.idPatronal;
+    let statusActualizar:any[] = [];
+    //alert(this.idPatronal);
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "ALTA" || item.tipoMovimiento == "Reingreso"){
 
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
 
-        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        }else{
+          statusActualizar.push(item._id);
+        
+        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
         //console.log(item.registroPatronal.numeroPatronal );
@@ -107,20 +128,21 @@ export class InicioComponent implements OnInit {
 
         SubDelegacion = "08" + item.subdelegacion;
         NumeroSubDelegacion = item.subdelegacion;
-        SubDelegacion = SubDelegacion.padEnd(17);
+        SubDelegacion = SubDelegacion.padEnd(18);
 
         let Curp = item.curp + "9";
 
 
-        Linea = RegistroPatronal +
-                Apellido +
-                Nombre +
-                Salario +
-                SubDelegacion +
-                `${Curp}\r\n`;
-      nTotalRegistros++;
+            Linea = RegistroPatronal +
+                    Apellido +
+                    Nombre +
+                    Salario +
+                    SubDelegacion +
+                    `${Curp}\r\n`;
+          nTotalRegistros++;
 
-      Archivo.push(Linea);
+          Archivo.push(Linea);
+        }
 
       //alert("el tipo es " + item.tipoTrabajador)
       }
@@ -142,6 +164,12 @@ export class InicioComponent implements OnInit {
     var fileName = "Altas_Sua.txt";
     //console.log(Archivo.toString().split(',').join(''));
     this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
+      if(resp){
+        alerta(true, "archivo generado")
+      }
+    })
+    // console.log(statusActualizar);
   }
   exportaTXTMODIFICACION(){
     let Linea:string = "";
@@ -149,10 +177,12 @@ export class InicioComponent implements OnInit {
     let SubDelegacion = "";
     let NumeroSubDelegacion = "";
     let nTotalRegistros = 0;
+    let NuevoRegostroPatronal = this.idPatronal;
+    let statusActualizar:any[] = [];
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "MODIFICACION"){
-
-        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        statusActualizar.push(item._id);
+        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
         let Apellido = item.apellidoMaterno;
@@ -198,6 +228,7 @@ export class InicioComponent implements OnInit {
     Archivo.push(LineaFinal);
     //console.log(Archivo)
     this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+     
   }
   exportaTXTBAJA(){
     let Linea:string = "";
@@ -205,10 +236,11 @@ export class InicioComponent implements OnInit {
     let SubDelegacion = "";
     let NumeroSubDelegacion = "";
     let nTotalRegistros = 0;
+    let NuevoRegostroPatronal = this.idPatronal;
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "BAJA"){
 
-        let RegistroPatronal = item.registroPatronal.numeroPatronal + item.numSocial + item.apellidoPaterno; //50
+        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
         let Apellido = item.apellidoMaterno;
@@ -342,7 +374,7 @@ export class InicioComponent implements OnInit {
        nombres: this.registerForm.value.nombres,
        nombreCompleto: this.registerForm.value.nombreCompleto,
        numSocial: this.registerForm.value.numSocial,
-       sd: parseFloat(this.registerForm.value.sd),
+       sd: this.registerForm.value.sd == undefined ? "0.00" : parseFloat(this.registerForm.value.sd).toFixed(2),
        salarioInt: parseFloat(this.registerForm.value.salarioInt),
        curp: this.registerForm.value.curp,
        rfc: this.registerForm.value.rfc,
@@ -370,13 +402,13 @@ export class InicioComponent implements OnInit {
        causaBaja: this.registerForm.value.causaBaja,
        dias: parseInt(this.registerForm.value.dias),
        tipoJornada: this.registerForm.value.tipoJornada,
-       umf: this.registerForm.value.umf,
-       subdelegacion: this.registerForm.value.subdelegacion
+       umf: parseInt(this.registerForm.value.umf).toString().padStart(3, "000"),
+       subdelegacion: parseInt(this.registerForm.value.subdelegacion).toString().padStart(5,"00000")
       }
       this.idseSE.upadteMovimiento(inputMovimiento).then(resp=>{
         if(resp){
           alerta(true, "Actualizado correctamente");
-          this.buscaBrokers();
+          this.limpiarGrid();
         }else{
           alerta(false, "ha odurrido un error")
         }
@@ -392,5 +424,20 @@ export class InicioComponent implements OnInit {
           return salario.padStart(6, "000000");
       }
     }
-
+    getPatronales(){
+      this.patronalService.getsPatronales().then((resp:any)=>{
+        this.patronales = resp;
+      });
+    }
+    limpiarGrid(){
+      this.isdImss = [];
+    }
+    validaColor(numSocial:any, apellidoPaterno:any , nombres:any, subdelegacion:any , umf:any){
+      if(numSocial == "" || apellidoPaterno == "" || nombres == "" || subdelegacion == "" || umf == ""){
+        return {'background-color':'red'}
+      }else{
+        return {}
+      }
+     
+    }
 }

@@ -18,17 +18,27 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-3 col-md-12">
                                     <div>
-                                        <label for="first_name">Brokers</label>
+                                        <label for="first_name">Clientes</label>
                                         <ng-select [(ngModel)]="selectedEmp" [ngModelOptions]="{standalone: true}">
                                             <ng-option *ngFor="let car of brokers" [value]="car._id">{{car.broker}}</ng-option>
                                          </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-3 col-md-12">
+                                    <div>
+                                        <label for="">Registro Patronal</label>
+                                        <ng-select [(ngModel)]="idPatronal" [ngModelOptions]="{standalone: true}">
+                                            <ng-option *ngFor="let car of patronales" [value]="car.numeroPatronal">{{car.nombre}}</ng-option>
+                                         </ng-select>
+                                        <label for="" hidden>Registro Patronal</label>
+                                        <input type="text" hidden class="form-control" >
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <button class="btn btn-primary"  (click)="buscaBrokers()">Buscar</button>
+                                    <button class="btn btn-primary"  (click)="buscaBrokers()">Agregar</button>
                                 </div>
                                 <div class="col-lg-3"> 
                                     <button class="btn btn-primary" (click)="exportaTXTALTA()">GENERAR SUA ALTA</button>
@@ -64,10 +74,21 @@
                             </div>
                         </div>
                         <div class="table-responsive" style="overflow-y: hidden;">
+                            <div style="padding: 10px;">
+                                <button class="btn btn-danger" (click)="limpiarGrid()">Limipiar</button>
+                                <br>
+                                <div style="padding: 10px;">
+                                   <div style="background-color: red; width: 20px; height: 20px; float: left; margin-right: 10px; border-radius: 10px;">
+                                   </div>
+                                   <div>
+                                       <label for="">Flatan campos por llenar</label>
+                                   </div>
+                                </div>
+                            </div>
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th class="border-bottom text-center">BROKER</th>
+                                    <th class="border-bottom text-center">Cliente</th>
                                     <th class="border-bottom text-center">FECHA RECEPCION</th>
                                     <th class="border-bottom text-center">NSS</th>
                                     <th class="border-bottom text-center"><div style="width: 250px;">NOMBRE COMPLETO</div></th>
@@ -83,7 +104,7 @@
                                 </thead>
                                 <tbody>
                                 <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
-                                    <td>{{emp.idEmpresa.broker}}</td>
+                                    <td [style]="validaColor(emp.numSocial, emp.apellidoPaterno ,  emp.nombres , emp.subdelegacion , emp.umf)" >{{emp.idEmpresa.broker}}</td>
                                     <td>{{emp.fechaMovimiento}}</td>
                                     <td>{{emp.numSocial}}</td>
                                     <td>{{emp.nombreCompleto}}</td>
@@ -123,7 +144,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Apellido Paterno</label>
+                                <label for="">Apellido Paterno *</label>
                                 <input type="text" class="form-control" formControlName="apellidoPaterno">
                             </div>
                             <div class="col-lg-3 col-md-12">
@@ -131,65 +152,92 @@
                                 <input type="text" class="form-control" formControlName="apellidoMaterno">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Nombres</label>
+                                <label for="">Nombres *</label>
                                 <input type="text" class="form-control" formControlName="nombres">
                                 <br>
                             </div>
-                            <hr>
+                            
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Nombre Completo</label>
                                 <input type="text" class="form-control" formControlName="nombreCompleto">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">NSS</label>
+                                <label for="">NSS *</label>
                                 <input type="text" class="form-control" formControlName="numSocial">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Salario Diario</label>
-                                <input type="text" class="form-control" formControlName="sd">
+                                <label for="">Salario Diario *</label>
+                                <input type="number" class="form-control" formControlName="sd">
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Salario Integrado</label>
                                 <input type="text" class="form-control" formControlName="salarioInt">
                                 <br>
                             </div>
-                            <hr>
+                            
                             <div class="col-lg-3 col-md-12">
-                                <label for="">CURP</label>
-                                <input type="text" class="form-control" formControlName="curp">
+                                <label for="">CURP *</label>
+                                <input type="text" class="form-control" formControlName="curp" maxlength="18">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">RFC</label>
-                                <input type="text" class="form-control" formControlName="rfc">
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Fecha Movimiento</label>
+                                <label for="">Fecha Movimiento *</label>
                                 <input type="date" class="form-control" formControlName="fechaMovimiento">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Aportacion de Infonavid</label>
-                                <input type="text" class="form-control" formControlName="aportacionInfonavid">
-                                <br>
-                            </div>
-                            <hr>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Credito Infonavid vigente</label>
-                                <input type="text" class="form-control" formControlName="creditoInfonavidVigente">
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Numero de credito</label>
-                                <input type="text" class="form-control" formControlName="numeroCredito">
+                                <label for="">Tipo Trabajador *</label>
+                                <select name="" id="" class="form-select" formControlName="tipoTrabajador">
+                                    <option value="1">Permanente</option>
+                                    <option value="2">Eventual</option>
+                                    <option value="3">Eventual Construccion</option>
+                                </select>
+                                
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Monto descuento CFVSMFD</label>
-                                <input type="text" class="form-control" formControlName="montoDescuentoCFVSMFD">
+                                <label for="">Tipo Salario *</label>
+                                <select name="" id="" class="form-select" formControlName="tipoSalario">
+                                    <option value="0">Fijo</option>
+                                    <option value="1">Variable</option>
+                                    <option value="2">Mixto</option>
+                                </select>
+                               <br>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo de Jornada *</label>
+                                <select name="" id="" class="form-select" formControlName="tipoJornada">
+                                    <option value="0">Jornada Completa</option>
+                                    <option value="1"> 1 - numero de dias trabajados</option>
+                                    <option value="2"> 2 - numero de dias trabajados</option>
+                                    <option value="3"> 3 - numero de dias trabajados</option>
+                                    <option value="4"> 4 - numero de dias trabajados</option>
+                                    <option value="5"> 5 - numero de dias trabajados</option>
+                                    <option value="6">menos de un dia trabajado</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">UMF *</label>
+                                <input type="text" class="form-control" formControlName="umf"  maxlength="3">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Sub Delegación *</label>
+                                <input type="text" class="form-control" formControlName="subdelegacion"  maxlength="5">
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Fecha Alta</label>
                                 <input type="date" class="form-control" formControlName="fechaAlta">
                                 <br>
                             </div>
-                            <hr>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">RFC</label>
+                                <input type="text" class="form-control" formControlName="rfc">
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Numero de credito</label>
+                                <input type="text" class="form-control" formControlName="numeroCredito">
+                            </div>
+                           
+                           
+                            
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Incidendia</label>
                                 <input type="text" class="form-control" formControlName="incidencia">
@@ -197,6 +245,22 @@
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Fecha Baja</label>
                                 <input type="date" class="form-control" formControlName="fechaBaja">
+                                <br>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">causaBaja</label>
+                                <select name="" id="" class="form-select" formControlName="causaBaja">
+                                    <option value="1">Termino de contrato</option>
+                                    <option value="2">Separacion Voluntaria</option>
+                                    <option value="3">Abandono de empleo | Defuncion</option>
+                                    <option value="5">Clausura</option>
+                                    <option value="6">Otra</option>
+                                    <option value="7">Ausentismo</option>
+                                    <option value="8">Resicion de contrato</option>
+                                    <option value="9">Jubilacion | A Pension</option>
+                                </select>
+                               
+                              
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Salario Base</label>
@@ -207,36 +271,17 @@
                                 <input type="text" class="form-control" formControlName="claveTrabajador">
                                 <br>
                             </div>
-                            <hr>
+                            
                            
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo Trabajador</label>
-                                <select name="" id="" class="form-select" formControlName="tipoTrabajador">
-                                    <option value="1">Permanente</option>
-                                    <option value="2">Eventual</option>
-                                    <option value="3">Eventual Construccion</option>
-                                </select>
-                                <br>
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo Salario</label>
-                                <select name="" id="" class="form-select" formControlName="tipoSalario">
-                                    <option value="0">Fijo</option>
-                                    <option value="1">Variable</option>
-                                    <option value="2">Mixto</option>
-                                </select>
-                                <br>
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Semana Jornada Reducida </label>
-                                <input type="text" class="form-control" formControlName="semanaJornadaReducida">
-                            </div>
-                            <div class="col-lg-3 col-md-12">
+                            
+                           
+                            
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Unidad Medicina Familiar </label>
                                 <input type="text" class="form-control" formControlName="unidadMedicinaFamiliar">
                                 <br>
                             </div>
-                            <hr>
+                            
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Guia</label>
                                 <input type="text" class="form-control" formControlName="guia">
@@ -254,12 +299,12 @@
                                 <input type="text" class="form-control" formControlName="digitoVerificadorRP">
                                 <br>
                             </div>
-                            <hr>
-                            <div class="col-lg-3 col-md-12">
+                            
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Identificador NSS</label>
                                 <input type="text" class="form-control" formControlName="digitoVerificadorNSS">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Terminacion</label>
                                 <input type="text" class="form-control" formControlName="terminacion">
                             </div>
@@ -272,44 +317,24 @@
                                 <input type="text" class="form-control" formControlName="dias">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">causaBaja</label>
-                                <select name="" id="" class="form-select" formControlName="causaBaja">
-                                    <option value="1">Termino de contrato</option>
-                                    <option value="2">Separacion Voluntaria</option>
-                                    <option value="3">Abandono de empleo | Defuncion</option>
-                                    <option value="5">Clausura</option>
-                                    <option value="6">Otra</option>
-                                    <option value="7">Ausentismo</option>
-                                    <option value="8">Resicion de contrato</option>
-                                    <option value="9">Jubilacion | A Pension</option>
-                                </select>
-                               
+                                <label for="">Monto descuento CFVSMFD</label>
+                                <input type="text" class="form-control" formControlName="montoDescuentoCFVSMFD">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Aportacion de Infonavid</label>
+                                <input type="text" class="form-control" formControlName="aportacionInfonavid">
                                 <br>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo de Jornada</label>
-                                <select name="" id="" class="form-select" formControlName="tipoJornada">
-                                    <option value="0">Jornada Completa</option>
-                                    <option value="1"> 1 - numero de dias trabajados</option>
-                                    <option value="2"> 2 - numero de dias trabajados</option>
-                                    <option value="3"> 3 - numero de dias trabajados</option>
-                                    <option value="4"> 4 - numero de dias trabajados</option>
-                                    <option value="5"> 5 - numero de dias trabajados</option>
-                                    <option value="6">menos de un dia trabajado</option>
-                                </select>
-                               
-                                <br>
+                                <label for="">Credito Infonavid vigente</label>
+                                <input type="text" class="form-control" formControlName="creditoInfonavidVigente">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">UMF</label>
-                                <input type="text" class="form-control" formControlName="umf">
+                                <label for="">Semana Jornada Reducida </label>
+                                <input type="text" class="form-control" formControlName="semanaJornadaReducida">
                             </div>
-                            <div class="col-lg-3 col-md-12">
-                                <label for="">Sub Delegación</label>
-                                <input type="text" class="form-control" formControlName="subdelegacion">
-                            </div>
-                            <div>
-                                <button class="btn btn-primary">Actualizar</button>
+                            <div style="padding: 10px;">
+                                <button class="btn btn-primary" [disabled]="registerForm.valid">Actualizar</button>
                             </div>
                        </div>
                    </form>
