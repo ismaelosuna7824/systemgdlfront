@@ -169,7 +169,7 @@
                                 <label for="">Salario Diario *</label>
                                 <input type="number" class="form-control" formControlName="sd">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Salario Integrado</label>
                                 <input type="text" class="form-control" formControlName="salarioInt">
                                 <br>
@@ -232,7 +232,7 @@
                             </div>
                             
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Numero de credito</label>
+                                <label for="">Numero de Credito</label>
                                 <input type="text" class="form-control" formControlName="numeroCredito">
                             </div>
                            
@@ -248,7 +248,17 @@
                                 <br>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">causaBaja</label>
+                                <label for="">Dias de Desempleo</label>
+                                    <select name="" id="" class="form-select" formControlName="diaDesempleo">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                <br>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Causa Baja</label>
                                 <select name="" id="" class="form-select" formControlName="causaBaja">
                                     <option value="1">Termino de contrato</option>
                                     <option value="2">Separacion Voluntaria</option>

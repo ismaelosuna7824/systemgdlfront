@@ -78,11 +78,12 @@ export class AltaIdsComponent implements OnInit {
         digitoVerificadorRP: "",
         digitoVerificadorNSS: "",
         terminacion: "00000000",
-        causaBaja: "",
+        causaBaja: "1",
         tipoJornada: "0",
         umf: "000",
         subdelegacion: "00000",
-        status: 0
+        status: 0,
+        diaDesempleo: 1
       });
     }else{
       alerta(false, "error, este empleado ya ha sido agregado a la lista")
@@ -96,15 +97,24 @@ export class AltaIdsComponent implements OnInit {
   registerIDS(){
     for (const key in this.idse) {
         this.idse[key].sd = parseFloat(this.idse[key].sd).toFixed(2);
+        this.idse[key].diaDesempleo = parseFloat(this.idse[key].diaDesempleo.toString());
     }
-    this.idsService.registerIds(this.idse).then(resp=>{
-      if(resp){
-        alerta(true, "Registro completado correctamente");
-        this.idse = [];
-      }else{
-        alerta(false, "Ha ocurrido un error");
-      }
-    })
+    //console.log(this.idse)
+    const datBaja = this.idse.filter(epm=> epm.tipoMovimiento == "BAJA").filter(dta => dta.fechaBaja == "" );
+
+    if(datBaja.length >= 1 ){
+      alerta(false, 'verifique que los que esten marcado como baja tengan todos los datos. (dia de desempleo y fecha de baja)');
+    }else{
+      this.idsService.registerIds(this.idse).then(resp=>{
+          if(resp){
+            alerta(true, "Registro completado correctamente");
+            this.idse = [];
+          }else{
+            alerta(false, "Ha ocurrido un error");
+          }
+        })
+    }
+    
   }
   getStatus(){
     this.statuMoService.getstatusM().then((resp:any)=>{

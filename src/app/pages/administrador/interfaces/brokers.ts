@@ -55,6 +55,7 @@ export interface IDSIMSS {
     tipoJornada?: string; ///agregar estos campos
     umf: string; ///agregar estos campos
     subdelegacion: string ///agregar estos campos
+    diaDesempleo?: number
     registroPatronal?: registroP
 }
 

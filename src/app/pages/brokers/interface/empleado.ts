@@ -47,5 +47,5 @@ export interface IDSMO {
     umf?: string
     subdelegacion?: string
     status: number
-
+    diaDesempleo: number
 }

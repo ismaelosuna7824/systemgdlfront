@@ -66,6 +66,7 @@ export class InicioService {
             tipoJornada
             umf
             subdelegacion
+            diaDesempleo
           }
       }
     `;

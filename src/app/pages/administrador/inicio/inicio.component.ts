@@ -68,7 +68,8 @@ export class InicioComponent implements OnInit {
       causaBaja: ['', Validators.required],
       tipoJornada: ['', Validators.required],
       umf: ['', Validators.required],
-      subdelegacion: ['', Validators.required]
+      subdelegacion: ['', Validators.required],
+      diaDesempleo: ['']
     });
   }
 
@@ -348,7 +349,7 @@ export class InicioComponent implements OnInit {
       })
     }
     llenaForm(amp:IDSIMSS){
-      
+      //console.log(amp)
       this.registerForm.controls["tipoMovimiento"].setValue(amp.tipoMovimiento);
       this.registerForm.controls["apellidoPaterno"].setValue(amp.apellidoPaterno);
       this.registerForm.controls["apellidoMaterno"].setValue(amp.apellidoMaterno);
@@ -385,6 +386,7 @@ export class InicioComponent implements OnInit {
       this.registerForm.controls["tipoJornada"].setValue(amp.tipoJornada);
       this.registerForm.controls["umf"].setValue(amp.umf);
       this.registerForm.controls["subdelegacion"].setValue(amp.subdelegacion);
+      this.registerForm.controls["diaDesempleo"].setValue(amp.diaDesempleo)
       this.idMovimiento = amp._id;
     }
     actualizarMovimiento(){
@@ -425,7 +427,8 @@ export class InicioComponent implements OnInit {
        dias: parseInt(this.registerForm.value.dias),
        tipoJornada: this.registerForm.value.tipoJornada,
        umf: parseInt(this.registerForm.value.umf).toString().padStart(3, "000"),
-       subdelegacion: parseInt(this.registerForm.value.subdelegacion).toString().padStart(5,"00000")
+       subdelegacion: parseInt(this.registerForm.value.subdelegacion).toString().padStart(5,"00000"),
+       diaDesempleo: parseFloat(this.registerForm.value.diaDesempleo)
       }
       this.idseSE.upadteMovimiento(inputMovimiento).then(resp=>{
         if(resp){
