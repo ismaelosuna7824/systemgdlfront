@@ -72,6 +72,7 @@
                                     <th class="border-bottom text-center"><div style="width: 250px;">Nombre Completo</div></th>
                                     <th class="border-bottom text-center">Numero de Seguro Social</th>
                                     <th class="border-bottom text-center"><div style="width: 120px;">SDI</div></th>
+                                    <th class="border-bottom text-center"><div style="width: 120px;">Costo Diario</div></th>
                                     <th hidden class="border-bottom text-center">Salario Integrado</th>
                                     <th class="border-bottom text-center"><div style="width: 300px;">CURP</div></th>
                                     <th class="border-bottom text-center"><div style="width: 300px;">RFC</div></th>
@@ -112,6 +113,7 @@
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.nombreCompleto" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.numSocial" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input  type="number" class="form-control" [(ngModel)]="emp.sd" [ngModelOptions]="{standalone: true}"></td>
+                                    <td><input  type="number" class="form-control" [(ngModel)]="emp.costoDiario" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioInt" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.curp" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.rfc" [ngModelOptions]="{standalone: true}"></td>

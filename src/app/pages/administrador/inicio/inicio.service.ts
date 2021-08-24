@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Subscription } from 'rxjs';
@@ -10,7 +11,7 @@ export class InicioService {
   loading: boolean;
   posts: any;
   private querySubscription: Subscription;
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo, private http: HttpClient) { }
 
   getBrokers(idEmpresd:string){
     return new Promise((resolve, reject)=>{
@@ -67,6 +68,8 @@ export class InicioService {
             umf
             subdelegacion
             diaDesempleo
+            costoDiario
+            tipoAfiliacion
           }
       }
     `;
@@ -115,7 +118,7 @@ export class InicioService {
         });
     });
   }
-  updateStausIsd(data: any){
+  updateStausIsd(data: any, fechaAlta:any){
     return new Promise((resolve, reject)=>{
       const Register = gql`
            mutation updateMovimientoArray($movimiento: arrayUpdateMovimiento){
@@ -129,7 +132,8 @@ export class InicioService {
         mutation: Register,
         variables: {
           "movimiento": {
-            "idMovimiento": data
+            "idMovimiento": data,
+            "fechaAlta": `${fechaAlta}`
           }
         }
         }).subscribe(({ data }) =>{
@@ -142,5 +146,109 @@ export class InicioService {
         });
     });
   }
+  cargarMovimientosSQL(datos:any){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+           mutation insertMovimientoSql($movimiento: [MovimientoSqlInput]){
+              cargaMovimientosSQL(movimiento: $movimiento){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "movimiento": datos
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.cargaMovimientosSQL.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
+  cargarArchivosEMASQL(datos:any){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+          mutation insertMovimientoSql($movimiento: [CargaArchivoEMAInput]){
+            cargaArchivosEMASQL(movimiento: $movimiento){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "movimiento": datos
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.cargaArchivosEMASQL.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
+  cargarArchivosEBASQL(datos:any){
+    return new Promise((resolve, reject)=>{
+      const Register = gql`
+          mutation insertMovimientoSql($movimiento: [CargaArchivoEBAInput]){
+            cargaArchivosEBASQL(movimiento: $movimiento){
+                status
+                message
+              }
+            }
+        `;
+        this.apollo.mutate({
+        mutation: Register,
+        variables: {
+          "movimiento": datos
+        }
+        }).subscribe(({ data }) =>{
+          //console.log(data);
+          this.posts = data;
+          //console.log(this.posts.registerProduct.product.id);
+          resolve (this.posts.cargaArchivosEBASQL.status);
+        }, err =>{
+          resolve(false);
+        });
+    });
+  }
+
+  cargaMovimientos(){
+    
+    let mov = {
+      "cliente": "ARA Consultoria",
+      "broker": "SEDEVAPRO",
+      "registroPatronal": "Z296582810",
+      "tipoMovimiento": "ALTA",
+      "nombreCompleto": "Abraham Ocegueda Sanchez",
+      "nss": "4037410141",
+      "salarioDiario": 248.10,
+      "curp": "RUHM740920HJCZRG07",
+      "fechaMovimiento": "2021-08-06",
+      "tipoTrabajador": "Permanente",
+      "tipoSalario": "Fijo",
+      "tipoJornada": "Jornada Completa",
+      "umf": "123",
+      "subDelegacion": "12345",
+      "fechaAlta": "1900-01-01",
+      "rfc": "RUHM740920",
+      "numeroCredito": "123Tamarindo",
+      "incidencia": "",
+      "fechaBaja": "1900-01-01",
+      "diasDesempleo": 0,
+      "causaBaja": ""
+    }
+    return this.http.post("http://kpetrom.grupoit.mx/Control37/api/CargarMovimiento/", mov);
+  }
+
   
 }

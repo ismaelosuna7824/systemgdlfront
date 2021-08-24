@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit {
       curp: ['', Validators.required],
       rfc: ['', Validators.required],
       numeroSocial: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
+      costoDiario: ['', Validators.required],
       status: [1]
       });
   }
@@ -47,7 +48,8 @@ export class DashboardComponent implements OnInit {
       curp: this.registerForm.value.curp,
       rfc: this.registerForm.value.rfc,
       numSeguro: this.registerForm.value.numeroSocial,
-      status: this.registerForm.value.status
+      status: this.registerForm.value.status,
+      costoDiario: this.registerForm.value.costoDiario
     }
     
     if(this.idEmpleado == ""){

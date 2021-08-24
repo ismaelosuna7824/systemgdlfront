@@ -9,6 +9,18 @@
                         <div class="row align-items-center">
                             <div class="col">
                                 <h2 class="fs-5 fw-bold mb-0">Información General</h2>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="">Cargar Archivo EMA</label>
+                                        <input type="file" class="form-control" (change)="cargaEMA($event)" >
+                                        <label for="" *ngIf="mustraLoading">Cargando ...</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">Cargar Archivo EBA</label>
+                                        <input type="file" class="form-control" (change)="cargaEBA($event)" >
+                                    </div>
+                                </div>
+                                <!-- <button (click)="pruebaHttp()">Cargar cosa</button> -->
                             </div>
                         </div>
                     </div>
@@ -93,29 +105,29 @@
                                     <th class="border-bottom text-center">NSS</th>
                                     <th class="border-bottom text-center"><div style="width: 250px;">NOMBRE COMPLETO</div></th>
                                     <th class="border-bottom text-center"><div style="width: 100px;">CURP</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 60px;">SBC</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 120px;">ESTATUS</div></th>
-                                    <th class="border-bottom text-center">FECHA ALTA</th>
+                                    <!-- <th class="border-bottom text-center"><div style="width: 60px;">SBC</div></th> -->
+                                    <th class="border-bottom text-center"><div style="width: 120px;">TIPO MOVIMIENTO</div></th>
+                                    <!-- <th class="border-bottom text-center">FECHA ALTA</th>
                                     <th class="border-bottom text-center">INCIDENCIA</th>
-                                    <th class="border-bottom text-center">FECHA DE BAJA</th>
-                                    <th class="border-bottom text-center">DIAS</th>
-                                    <th class="border-bottom text-center">EMA MES</th>
+                                    <th class="border-bottom text-center">FECHA DE BAJA</th> -->
+                                    <!-- <th class="border-bottom text-center">DIAS</th> -->
+                                    <!-- <th class="border-bottom text-center">EMA MES</th> -->
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
-                                    <td [style]="validaColor(emp.numSocial, emp.apellidoPaterno ,  emp.nombres , emp.subdelegacion , emp.umf)" >{{emp.idEmpresa.broker}}</td>
+                                    <td [style]="validaColor(emp.numSocial, emp.apellidoPaterno ,  emp.nombres , emp.subdelegacion , emp.umf, emp.costoDiario, emp.tipoAfiliacion)" >{{emp.idEmpresa.broker}}</td>
                                     <td>{{emp.fechaMovimiento}}</td>
                                     <td>{{emp.numSocial}}</td>
                                     <td>{{emp.nombreCompleto}}</td>
                                     <td>{{emp.curp}}</td>
-                                    <td>{{emp.sd}}</td>
+                                    <!-- <td>{{emp.sd}}</td> -->
                                     <td>{{emp.tipoMovimiento}}</td>
-                                    <td>{{emp.fechaAlta}}</td>
-                                    <td>{{emp.incidencia}}</td>
-                                    <td>{{emp.fechaBaja}}</td>
-                                    <td>{{emp.dias}}</td>
-                                    <td>{{emp.emaMes}}</td>
+                                    <!-- <td>{{emp.fechaAlta}}</td>
+                                    <td>{{emp.incidencia}}</td> -->
+                                    <!-- <td>{{emp.fechaBaja}}</td> -->
+                                    <!-- <td>{{emp.dias}}</td> -->
+                                    <!-- <td>{{emp.emaMes}}</td> -->
                                     <td><button type="button" class="btn btn-block btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalSubscribe" (click)="llenaForm(emp)">ver toda la informacion</button></td>
                                  
                                 </tr>
@@ -135,6 +147,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content py-xl-4">
                 <div class="modal-body text-center py-3">
+                    <label for=""> Campos obligatorios: <span style="color: red;">*</span></label>
                    <form [formGroup]="registerForm" (ngSubmit)="actualizarMovimiento()">
                        <div class="row">
                             <div class="col-lg-3 col-md-12">
@@ -144,7 +157,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Apellido Paterno *</label>
+                                <label for="">Apellido Paterno <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="apellidoPaterno">
                             </div>
                             <div class="col-lg-3 col-md-12">
@@ -152,7 +165,7 @@
                                 <input type="text" class="form-control" formControlName="apellidoMaterno">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Nombres *</label>
+                                <label for="">Nombres <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="nombres">
                                 <br>
                             </div>
@@ -162,12 +175,16 @@
                                 <input type="text" class="form-control" formControlName="nombreCompleto">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">NSS *</label>
+                                <label for="">NSS <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="numSocial">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Salario Diario *</label>
+                                <label for="">Salario Diario <span style="color: red;">*</span></label>
                                 <input type="number" class="form-control" formControlName="sd">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Costo Diario <span style="color: red;">*</span></label>
+                                <input type="number" class="form-control" formControlName="costoDiario">
                             </div>
                             <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Salario Integrado</label>
@@ -176,15 +193,15 @@
                             </div>
                             
                             <div class="col-lg-3 col-md-12">
-                                <label for="">CURP *</label>
+                                <label for="">CURP <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="curp" maxlength="18">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Fecha Movimiento *</label>
+                                <label for="">Fecha Movimiento <span style="color: red;">*</span></label>
                                 <input type="date" class="form-control" formControlName="fechaMovimiento">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo Trabajador *</label>
+                                <label for="">Tipo Trabajador <span style="color: red;">*</span></label>
                                 <select name="" id="" class="form-select" formControlName="tipoTrabajador">
                                     <option value="1">Permanente</option>
                                     <option value="2">Eventual</option>
@@ -193,7 +210,7 @@
                                 
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo Salario *</label>
+                                <label for="">Tipo Salario <span style="color: red;">*</span></label>
                                 <select name="" id="" class="form-select" formControlName="tipoSalario">
                                     <option value="0">Fijo</option>
                                     <option value="1">Variable</option>
@@ -202,7 +219,7 @@
                                <br>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Tipo de Jornada *</label>
+                                <label for="">Tipo de Jornada <span style="color: red;">*</span></label>
                                 <select name="" id="" class="form-select" formControlName="tipoJornada">
                                     <option value="0">Jornada Completa</option>
                                     <option value="1"> 1 - numero de dias trabajados</option>
@@ -214,12 +231,21 @@
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">UMF *</label>
+                                <label for="">UMF <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="umf"  maxlength="3">
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <label for="">Sub Delegación *</label>
+                                <label for="">Sub Delegación <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" formControlName="subdelegacion"  maxlength="5">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <label for="">Tipo Afiliacion <span style="color: red;">*</span></label>
+                                <select name="" id="" class="form-select" formControlName="tipoAfiliacion">
+                                    <option value="APORTACIONES INFONAVID">APORTACIONES INFONAVID</option>
+                                    <option value="BAJA">BAJA</option>
+                                    <option value="NO VIGENTE">NO VIGENTE</option>
+                                    <option value="SOLO IMSS">SOLO IMSS</option>
+                                </select>
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Fecha Alta</label>
@@ -272,11 +298,11 @@
                                
                               
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Salario Base</label>
                                 <input type="text" class="form-control" formControlName="salarioBase">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Clave Trabajador</label>
                                 <input type="text" class="form-control" formControlName="claveTrabajador">
                                 <br>
@@ -292,19 +318,19 @@
                                 <br>
                             </div>
                             
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Guia</label>
                                 <input type="text" class="form-control" formControlName="guia">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Clave Unica</label>
                                 <input type="text" class="form-control" formControlName="claveUnica">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Identificador Formato</label>
                                 <input type="text" class="form-control" formControlName="identificadorFormato">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Identificador RP</label>
                                 <input type="text" class="form-control" formControlName="digitoVerificadorRP">
                                 <br>
@@ -318,28 +344,28 @@
                                 <label for="">Terminacion</label>
                                 <input type="text" class="form-control" formControlName="terminacion">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">EMA MES</label>
                                 <input type="text" class="form-control" formControlName="emaMes">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Dias Trabajados</label>
                                 <input type="text" class="form-control" formControlName="dias">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Monto descuento CFVSMFD</label>
                                 <input type="text" class="form-control" formControlName="montoDescuentoCFVSMFD">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Aportacion de Infonavid</label>
                                 <input type="text" class="form-control" formControlName="aportacionInfonavid">
                                 <br>
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Credito Infonavid vigente</label>
                                 <input type="text" class="form-control" formControlName="creditoInfonavidVigente">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Semana Jornada Reducida </label>
                                 <input type="text" class="form-control" formControlName="semanaJornadaReducida">
                             </div>

@@ -24,6 +24,7 @@ export class DashboardService {
             curp
             rfc
             numSeguro
+            costoDiario
             idEmpresa{
               broker
             }
@@ -69,6 +70,7 @@ export class DashboardService {
             "curp": `${empleado.curp}`,
             "rfc": `${empleado.rfc}`,
             "numSeguro": `${empleado.numSeguro}`,
+            "costoDiario": `${empleado.costoDiario}`,
             "status": 1
           }
         }
@@ -102,6 +104,7 @@ export class DashboardService {
             "curp": `${empleado.curp}`,
             "rfc": `${empleado.rfc}`,
             "numSeguro": `${empleado.numSeguro}`,
+            "costoDiario": `${empleado.costoDiario}`,
             "status": empleado.status
           }
         }
@@ -115,4 +118,5 @@ export class DashboardService {
         });
     });
   }
+  
 }

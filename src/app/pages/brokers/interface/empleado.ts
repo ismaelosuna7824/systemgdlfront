@@ -6,6 +6,7 @@ export interface Empleado  {
     rfc?: string;
     numSeguro?: string;
     status?: number; 
+    costoDiario?: string;
 }
 
 export interface IDSMO {
@@ -46,6 +47,8 @@ export interface IDSMO {
     tipoJornada?: string
     umf?: string
     subdelegacion?: string
-    status: number
-    diaDesempleo: number
+    status?: number
+    diaDesempleo?: number
+
+    costoDiario?: string;
 }

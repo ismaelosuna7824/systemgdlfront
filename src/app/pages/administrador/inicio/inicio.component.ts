@@ -7,7 +7,9 @@ import { PatronalService } from '../patronales/patronal.service';
 import { PatronalInput } from '../patronales/patronales';
 import { StatusmovimientosService } from '../status-movimientos/statusmovimientos.service';
 import { InicioService } from './inicio.service';
-
+import { ArchivoEBa, ArchivoEma, MovimientosAPI } from './serviciosInterface';
+import * as XLSX from 'xlsx';
+type AOA = any[][];
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -23,6 +25,10 @@ export class InicioComponent implements OnInit {
   patronales: PatronalInput[] = [];
   statusMovimitos: statusMovimiento[] = [];
   idPatronal: string = "";
+
+  data: AOA = [[1, 2], [3, 4]];
+
+  mustraLoading = false;
   constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService, private patronalService: PatronalService) { }
 
   ngOnInit(): void {
@@ -69,7 +75,9 @@ export class InicioComponent implements OnInit {
       tipoJornada: ['', Validators.required],
       umf: ['', Validators.required],
       subdelegacion: ['', Validators.required],
-      diaDesempleo: ['']
+      diaDesempleo: [''],
+      costoDiario: ['', Validators.required],
+      tipoAfiliacion: ['', Validators.required]
     });
   }
 
@@ -85,8 +93,9 @@ export class InicioComponent implements OnInit {
 
     if(validaDuplicado.length == 0){
       this.idseSE.getBrokers(this.selectedEmp).then((resp:any)=>{
+
         this.isdImss.push(... resp);
-        // console.log(resp);
+         //console.log(resp);
       });
     }else{
      
@@ -95,6 +104,13 @@ export class InicioComponent implements OnInit {
   }
 
   exportaTXTALTA(){
+    let  today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    let newDate = yyyy + '-' + mm + '-' + dd;
+
+
     let Linea:string = "";
     let Archivo: any [] = [];
     let nTotalRegistros = 0;
@@ -103,14 +119,40 @@ export class InicioComponent implements OnInit {
 
     let NuevoRegostroPatronal = this.idPatronal;
     let statusActualizar:any[] = [];
+
+    let MovimientoApi:MovimientosAPI[] = [];
     //alert(this.idPatronal);
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "ALTA" || item.tipoMovimiento == "Reingreso"){
 
-        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
 
         }else{
-          statusActualizar.push(item._id);
+        statusActualizar.push(item._id);
+
+        MovimientoApi.push({
+          cliente: item.idEmpresa.broker,
+          broker: item.registroPatronal.nombre,
+          registroPatronal: item.registroPatronal.numeroPatronal,
+          tipoMovimiento: item.tipoMovimiento,
+          nombreCompleto: item.nombreCompleto,
+          nss: item.numSocial,
+          salarioDiario: item.sd.toString(),
+          curp: item.curp,
+          fechaMovimiento: item.fechaMovimiento,
+          tipoTrabajador: item.tipoTrabajador,
+          tipoSalario: item.tipoSalario,
+          tipoJornada: item.tipoJornada,
+          umf: item.umf,
+          subDelegacion: item.subdelegacion,
+          fechaAlta: `${newDate}`,
+          rfc: item.rfc,
+          numeroCredito: item.numeroCredito.toString(),
+          incidencia: item.incidencia,
+          fechaBaja: item.fechaBaja,
+          diaDesempleo: item.diaDesempleo,
+          causaBaja: item.causaBaja
+        });
         
         let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
@@ -149,7 +191,7 @@ export class InicioComponent implements OnInit {
       }
     });
     
-    
+    if(statusActualizar.length >= 1){
     let Delimitador = "*************";
     Delimitador = Delimitador.padEnd(56);
 
@@ -165,14 +207,26 @@ export class InicioComponent implements OnInit {
     var fileName = "Altas_Sua.txt";
     //console.log(Archivo.toString().split(',').join(''));
     this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
-    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
-      if(resp){
-        alerta(true, "archivo generado")
-      }
-    })
+      this.idseSE.updateStausIsd(statusActualizar, "1").then(resp=>{
+        if(resp){
+          alerta(true, "archivo generado")
+        }
+      })
+      this.idseSE.cargarMovimientosSQL(MovimientoApi);
+    }
+    // console.log(MovimientoApi)
+    // this.idseSE.cargarMovimientosSQL(MovimientoApi);
+    
     // console.log(statusActualizar);
   }
   exportaTXTMODIFICACION(){
+
+    let  today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    let newDate = yyyy + '-' + mm + '-' + dd;
+
     let Linea:string = "";
     let Archivo: any [] = [];
     let SubDelegacion = "";
@@ -180,13 +234,40 @@ export class InicioComponent implements OnInit {
     let nTotalRegistros = 0;
     let NuevoRegostroPatronal = this.idPatronal;
     let statusActualizar:any[] = [];
+
+    let MovimientoApi:MovimientosAPI[] = [];
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "MODIFICACION"){
-        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == "" || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
 
         }else{
 
-          statusActualizar.push(item._id);
+        statusActualizar.push(item._id);
+
+        MovimientoApi.push({
+          cliente: item.idEmpresa.broker,
+          broker: item.registroPatronal.nombre,
+          registroPatronal: item.registroPatronal.numeroPatronal,
+          tipoMovimiento: item.tipoMovimiento,
+          nombreCompleto: item.nombreCompleto,
+          nss: item.numSocial,
+          salarioDiario: item.sd.toString(),
+          curp: item.curp,
+          fechaMovimiento: item.fechaMovimiento,
+          tipoTrabajador: item.tipoTrabajador,
+          tipoSalario: item.tipoSalario,
+          tipoJornada: item.tipoJornada,
+          umf: item.umf,
+          subDelegacion: item.subdelegacion,
+          fechaAlta: `${newDate}`,
+          rfc: item.rfc,
+          numeroCredito: item.numeroCredito.toString(),
+          incidencia: item.incidencia,
+          fechaBaja: item.fechaBaja,
+          diaDesempleo: item.diaDesempleo,
+          causaBaja: item.causaBaja
+        });
+
         let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
         RegistroPatronal = RegistroPatronal.padEnd(49);
 
@@ -215,34 +296,45 @@ export class InicioComponent implements OnInit {
             `${Curp}\r\n`;
 
         nTotalRegistros++;
-      Archivo.push(Linea);
-        }
+        Archivo.push(Linea);
+        
+      }
         
       }
     });
-    var fileName = "MODIFICACION_Sua.txt";
+    if(statusActualizar.length >= 1 ){
+      var fileName = "MODIFICACION_Sua.txt";
 
-    let Delimitador = "*************";
-    Delimitador = Delimitador.padEnd(56);
+        let Delimitador = "*************";
+        Delimitador = Delimitador.padEnd(56);
 
-    let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString()); 
-    TotalRegistros = TotalRegistros.padEnd(77);
+        let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString()); 
+        TotalRegistros = TotalRegistros.padEnd(77);
 
-    SubDelegacion = NumeroSubDelegacion;
-    SubDelegacion = SubDelegacion.padEnd(34);
+        SubDelegacion = NumeroSubDelegacion;
+        SubDelegacion = SubDelegacion.padEnd(34);
 
-    let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
-    Archivo.push(LineaFinal);
-    //console.log(Archivo)
-    this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
-    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
-      if(resp){
-        alerta(true, "archivo generado")
-      }
-    })
+        let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
+        Archivo.push(LineaFinal);
+        //console.log(Archivo)
+        this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+        this.idseSE.updateStausIsd(statusActualizar, "1").then(resp=>{
+          if(resp){
+            alerta(true, "archivo generado")
+            this.idseSE.cargarMovimientosSQL(MovimientoApi);
+          }
+        })
+    }
      
   }
   exportaTXTBAJA(){
+    let  today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    let newDate = yyyy + '-' + mm + '-' + dd;
+
+
     let Linea:string = "";
     let Archivo: any [] = [];
     let SubDelegacion = "";
@@ -250,12 +342,41 @@ export class InicioComponent implements OnInit {
     let nTotalRegistros = 0;
     let NuevoRegostroPatronal = this.idPatronal;
     let statusActualizar:any[] = [];
+
+    let MovimientoApi:MovimientosAPI[] = [];
+
     this.isdImss.forEach(item=>{
       if(item.tipoMovimiento == "BAJA"){
-        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  ){
+        if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
 
         }else{
           statusActualizar.push(item._id);
+
+          MovimientoApi.push({
+            cliente: item.idEmpresa.broker,
+            broker: item.registroPatronal.nombre,
+            registroPatronal: item.registroPatronal.numeroPatronal,
+            tipoMovimiento: item.tipoMovimiento,
+            nombreCompleto: item.nombreCompleto,
+            nss: item.numSocial,
+            salarioDiario: item.sd.toString(),
+            curp: item.curp,
+            fechaMovimiento: item.fechaMovimiento,
+            tipoTrabajador: item.tipoTrabajador,
+            tipoSalario: item.tipoSalario,
+            tipoJornada: item.tipoJornada,
+            umf: item.umf,
+            subDelegacion: item.subdelegacion,
+            fechaAlta: `${newDate}`,
+            rfc: item.rfc,
+            numeroCredito: item.numeroCredito.toString(),
+            incidencia: item.incidencia,
+            fechaBaja: item.fechaBaja,
+            diaDesempleo: item.diaDesempleo,
+            causaBaja: item.causaBaja
+          });
+
+
           let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
           RegistroPatronal = RegistroPatronal.padEnd(49);
   
@@ -294,26 +415,29 @@ export class InicioComponent implements OnInit {
         
       }
     });
-    var fileName = "BAJAS_Sua.txt";
+    if(statusActualizar.length >= 1){
+      var fileName = "BAJAS_Sua.txt";
 
-    let Delimitador = "*************";
-    Delimitador = Delimitador.padEnd(56);
+      let Delimitador = "*************";
+      Delimitador = Delimitador.padEnd(56);
 
-    let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString());
-    TotalRegistros = TotalRegistros.padEnd(77);
+      let TotalRegistros = this.nuevoSalario(nTotalRegistros.toString());
+      TotalRegistros = TotalRegistros.padEnd(77);
 
-    SubDelegacion = NumeroSubDelegacion;
-    SubDelegacion = SubDelegacion.padEnd(34);
+      SubDelegacion = NumeroSubDelegacion;
+      SubDelegacion = SubDelegacion.padEnd(34);
 
-    let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
-    Archivo.push(LineaFinal);
-    //console.log(Archivo)
-    this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
-    this.idseSE.updateStausIsd(statusActualizar).then(resp=>{
-      if(resp){
-        alerta(true, "archivo generado")
-      }
-    })
+      let LineaFinal = Delimitador + TotalRegistros + SubDelegacion + "9";
+      Archivo.push(LineaFinal);
+      //console.log(Archivo)
+      this.saveTextAsFile(Archivo.toString().split(',').join(''), fileName);
+      this.idseSE.updateStausIsd(statusActualizar, "").then(resp=>{
+        if(resp){
+          alerta(true, "archivo generado")
+          console.log(MovimientoApi);
+        }
+      })
+    }
   }
   saveTextAsFile (data:any, filename:any){
 
@@ -386,7 +510,8 @@ export class InicioComponent implements OnInit {
       this.registerForm.controls["tipoJornada"].setValue(amp.tipoJornada);
       this.registerForm.controls["umf"].setValue(amp.umf);
       this.registerForm.controls["subdelegacion"].setValue(amp.subdelegacion);
-      this.registerForm.controls["diaDesempleo"].setValue(amp.diaDesempleo)
+      this.registerForm.controls["diaDesempleo"].setValue(amp.diaDesempleo);
+      this.registerForm.controls["costoDiario"].setValue(amp.costoDiario);
       this.idMovimiento = amp._id;
     }
     actualizarMovimiento(){
@@ -428,7 +553,9 @@ export class InicioComponent implements OnInit {
        tipoJornada: this.registerForm.value.tipoJornada,
        umf: parseInt(this.registerForm.value.umf).toString().padStart(3, "000"),
        subdelegacion: parseInt(this.registerForm.value.subdelegacion).toString().padStart(5,"00000"),
-       diaDesempleo: parseFloat(this.registerForm.value.diaDesempleo)
+       diaDesempleo: parseFloat(this.registerForm.value.diaDesempleo),
+       costoDiario: parseFloat(this.registerForm.value.costoDiario).toFixed(2),
+       tipoAfiliacion: this.registerForm.value.tipoAfiliacion
       }
       this.idseSE.upadteMovimiento(inputMovimiento).then(resp=>{
         if(resp){
@@ -457,12 +584,158 @@ export class InicioComponent implements OnInit {
     limpiarGrid(){
       this.isdImss = [];
     }
-    validaColor(numSocial:any, apellidoPaterno:any , nombres:any, subdelegacion:any , umf:any){
-      if(numSocial == "" || apellidoPaterno == "" || nombres == "" || subdelegacion == "" || umf == ""){
+    validaColor(numSocial:any, apellidoPaterno:any , nombres:any, subdelegacion:any , umf:any, costoDiario:any, tipoAfiliacion: any){
+      //console.log(tipoAfiliacion);
+      if(numSocial == "" || apellidoPaterno == "" || nombres == "" || subdelegacion == "" || umf == "" || costoDiario == "" || costoDiario == null ||  tipoAfiliacion == "" || tipoAfiliacion == null){
+        //console.log("el cosoto es ", costoDiario)
         return {'background-color':'red'}
       }else{
         return {}
       }
      
+    }
+
+    cargaEMA(ev:any){
+      let ConvertOJson!:string; 
+      let ArchivoEm: ArchivoEma[] = []
+      let data:any[];
+
+      const selectedFile = ev.target.files[0];
+      
+      const fileReader = new FileReader();
+      fileReader.readAsBinaryString(selectedFile);
+      fileReader.onload = (event:any)=>{
+        let binaryData = event.target.result;
+        let workbook = XLSX.read(binaryData, {type: 'binary'});
+        workbook.SheetNames.forEach(sheet=>{
+          data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+          // data.forEach((elem:any)=>{
+          //   //console.log(elem[2])
+          // })
+          
+        });
+      }
+      setTimeout(() => {
+        this.mustraLoading = true;
+        data.forEach((ele, ind)=>{
+       // console.log(ele['Origen del Movimiento'])
+         //console.log(ele[ind].NSS)
+          ArchivoEm.push({
+            nss: ele['NSS'],
+            nombreCompleto: ele['Nombre'].toString(),
+            origenMovimiento: ele['Origen del Movimiento'].toString(),
+            tipoMovimiento: ele['Tipo del Movimiento'].toString(),
+            fechaMovimiento: this.converdate(ele['Fecha del Movimiento']).toString(),
+            dias: parseInt(ele['Días']),
+            salarioDiario:  ele['Salario Diario'].toString(),
+            cuotaFija: ele['Cuota Fija'].toString(),
+            excedentePatronal: ele['Excedente Patronal'].toString(),
+            excedenteObrero: ele['Excedente Obrero'].toString(),
+            prestasionesDineroPatronal: ele['Prestaciones en Dinero Patronal'].toString(),
+            prestasionesDineroObrero: ele['Prestaciones en Dinero Obrero'].toString(),
+            gastoMedicosPensionadosPatronal: ele['Gastos Médicos y Pensionados Patronal'].toString(),
+            gastoMedicosPensionadosObrero: ele['Gastos Médicos y Pensionados Obrero'].toString(),
+            riesgoTrabajo: ele['Riesgos de Trabajo'].toString(),
+            invalidezVidaPatronal: ele['Invalidez y Vida Patronal'].toString(),
+            invelidezVidaObrero: ele['Invalidez y Vida Obrero'].toString(),
+            guarderiasPrestacionesSociales: ele['Guarderías y Prestaciones Sociales'].toString(),
+            total: ele['Total'].toString(),
+            
+          })
+        });
+        setTimeout(() => {
+            //console.log(ArchivoEm)
+            this.idseSE.cargarArchivosEMASQL(ArchivoEm).then(resp=>{
+              if(resp){
+                alerta(true, "Archivo cargado correctamente");
+                this.mustraLoading = false;
+              }else{
+                alerta(false, "ha ocurrido un error")
+              }
+            });
+        }, 1000);
+      }, 2000);
+      // this.idseSE.cargaMovimientos().subscribe(resp=>{
+      //   console.log(resp);
+      // });
+    }
+    cargaEBA(ev:any){
+      let ConvertOJson!:string; 
+      let ArchivoEm: ArchivoEBa[] = []
+      let data:any[];
+
+      const selectedFile = ev.target.files[0];
+      
+      const fileReader = new FileReader();
+      fileReader.readAsBinaryString(selectedFile);
+      fileReader.onload = (event:any)=>{
+        let binaryData = event.target.result;
+        let workbook = XLSX.read(binaryData, {type: 'binary'});
+        workbook.SheetNames.forEach(sheet=>{
+          data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+          // data.forEach((elem:any)=>{
+          //   //console.log(elem[2])
+          // })
+          
+        });
+      }
+      setTimeout(() => {
+        this.mustraLoading = true;
+        data.forEach((ele, ind)=>{
+       // console.log(ele['Origen del Movimiento'])
+         //console.log(ele[ind].NSS)
+          ArchivoEm.push({
+            nss: ele['NSS'],
+            nombreCompleto: ele['Nombre'].toString(),
+            origenMovimiento: ele['Origen del Movimiento'].toString(),
+            tipoMovimiento: ele['Tipo del Movimiento'].toString(),
+            fechaMovimiento: this.converdate(ele['Fecha del Movimiento']),
+            dias: parseInt(ele['Días']),
+            salarioDiario:  ele['Salario Diario'].toString(),
+            retiro: ele['Retiro'].toString(),
+            cesantiaEdadAvanzadaPatronal: ele['Cesantía en Edad Avanzada y Vejez Patronal'].toString(),
+            censatiaEdadAvanzadaObrero: ele['Cesantía en Edad Avanzada y Vejez Obrero'].toString(),
+            subtotalRCV: ele['Subtotal RCV'].toString(),
+            aportacionPatronal: ele['Aportación Patronal'].toString(),
+            tipoDescuento: ele['Tipo de Descuento'].toString(),
+            valorDescuento: ele['Valor de Descuento'].toString(),
+            numeroCredito: ele['Número de Crédito'].toString(),
+            amortizacion: ele['Amortización'].toString(),
+            subtotalInfonavit: ele['Subtotal Infonavit'].toString(), 
+            total: ele['Total'].toString(),
+          })
+        });
+        setTimeout(() => {
+           //console.log(ArchivoEm)
+            this.idseSE.cargarArchivosEBASQL(ArchivoEm).then(resp=>{
+              if(resp){
+                this.mustraLoading = false;
+                alerta(true, "Archivo cargado correctamente");
+              }else{
+                alerta(false, "ha ocurrido un error")
+              }
+            });
+        }, 1000);
+      }, 2000);
+      // this.idseSE.cargaMovimientos().subscribe(resp=>{
+      //   console.log(resp);
+      // });
+    }
+    converdate(date: string):string{
+        if(date == "-"){
+          return "01/01/0000";
+        }else{
+          let  today = new Date();
+          var dd = String(today.getDate()).padStart(2, '0');
+          var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+          var yyyy = today.getFullYear();
+          let newDate =  mm + '/' + dd + '/' + yyyy;
+          return `${newDate}`;
+        }
+    }
+    pruebaHttp(){
+      this.idseSE.cargaMovimientos().subscribe(resp=>{
+        console.log(resp);
+      })
     }
 }
