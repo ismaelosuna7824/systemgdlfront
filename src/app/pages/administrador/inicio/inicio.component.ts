@@ -644,11 +644,12 @@ export class InicioComponent implements OnInit {
           })
         });
         setTimeout(() => {
-            //console.log(ArchivoEm)
+            // console.log(ArchivoEm)
             this.idseSE.cargarArchivosEMASQL(ArchivoEm).then(resp=>{
               if(resp){
                 alerta(true, "Archivo cargado correctamente");
                 this.mustraLoading = false;
+                location.reload();
               }else{
                 alerta(false, "ha ocurrido un error")
               }
@@ -689,7 +690,7 @@ export class InicioComponent implements OnInit {
             nombreCompleto: ele['Nombre'].toString(),
             origenMovimiento: ele['Origen del Movimiento'].toString(),
             tipoMovimiento: ele['Tipo del Movimiento'].toString(),
-            fechaMovimiento: this.converdate(ele['Fecha del Movimiento']),
+            fechaMovimiento: this.converdate(ele['Fecha del Movimiento']).toString(),
             dias: parseInt(ele['Días']),
             salarioDiario:  ele['Salario Diario'].toString(),
             retiro: ele['Retiro'].toString(),
@@ -711,6 +712,7 @@ export class InicioComponent implements OnInit {
               if(resp){
                 this.mustraLoading = false;
                 alerta(true, "Archivo cargado correctamente");
+                location.reload();
               }else{
                 alerta(false, "ha ocurrido un error")
               }
@@ -722,10 +724,11 @@ export class InicioComponent implements OnInit {
       // });
     }
     converdate(date: string):string{
+      console.log(date);
         if(date == "-"){
           return "01/01/0000";
         }else{
-          let  today = new Date();
+          let  today = new Date(date);
           var dd = String(today.getDate()).padStart(2, '0');
           var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
           var yyyy = today.getFullYear();
