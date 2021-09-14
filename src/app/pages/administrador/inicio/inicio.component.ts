@@ -10,6 +10,9 @@ import { InicioService } from './inicio.service';
 import { ArchivoEBa, ArchivoEma, MovimientosAPI } from './serviciosInterface';
 import * as XLSX from 'xlsx';
 type AOA = any[][];
+
+const nav: any = window.navigator;
+
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -36,6 +39,7 @@ export class InicioComponent implements OnInit {
     this.getStatus();
     this.initForm();
     this.getPatronales();
+    this.getMovimientos()
   }
   initForm(){
     this.registerForm = this.formBuilder.group({
@@ -87,8 +91,17 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  buscaBrokers(){
+  getMovimientos(){
+    this.isdImss = [];
+    this.idseSE.buscaMovimentosnoId().then((resp:any)=>{
+      console.log(resp)
+      this.isdImss = resp
+    })
+  }
 
+  buscaBrokers(){
+    //alert(this.selectedEmp)
+    this.isdImss = [];
     const validaDuplicado = this.isdImss.filter(e => e.idEmpresa._id === this.selectedEmp);
 
     if(validaDuplicado.length == 0){
@@ -451,8 +464,8 @@ export class InicioComponent implements OnInit {
     var blob = new Blob([data], {type: 'text/plain'}),
         e    = document.createEvent('MouseEvents'),
         a    = document.createElement('a')
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, filename);
+      if (window.navigator && nav.msSaveOrOpenBlob) {
+        nav.msSaveOrOpenBlob(blob, filename);
       }
       else{
             var e = document.createEvent('MouseEvents'),

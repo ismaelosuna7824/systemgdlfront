@@ -13,6 +13,84 @@ export class InicioService {
   private querySubscription: Subscription;
   constructor(private apollo: Apollo, private http: HttpClient) { }
 
+
+  buscaMovimentosnoId(){
+    return new Promise((resolve, reject)=>{
+      const GET_POST = gql`
+      query movimientosNoId {
+        movimientosNoId {
+            idEmpleado
+            _id
+            idEmpresa{
+              _id
+              broker
+            }
+            tipoMovimiento
+            apellidoPaterno
+            apellidoMaterno
+            nombres
+            nombreCompleto
+            numSocial
+            sd
+            salarioInt
+            curp
+            rfc
+            fechaMovimiento
+            aportacionInfonavid
+            creditoInfonavidVigente
+            numeroCredito
+            montoDescuentoCFVSMFD
+            idEmpleado
+            fechaAlta
+            incidencia
+            fechaBaja
+            salarioBase
+            claveTrabajador
+            tipoTrabajador
+            tipoSalario
+            semanaJornadaReducida
+            unidadMedicinaFamiliar
+            guia
+            claveUnica
+            identificadorFormato
+            digitoVerificadorRP
+            digitoVerificadorNSS
+            terminacion
+            causaBaja
+            emaMes
+            dias
+            registroPatronal{
+                _id
+                numeroPatronal
+                nombre
+                registroPatronal
+              }
+            tipoJornada
+            umf
+            subdelegacion
+            diaDesempleo
+            costoDiario
+            tipoAfiliacion
+          }
+      }
+    `;
+    this.querySubscription = this.apollo.watchQuery<any>({
+      query: GET_POST,
+      fetchPolicy: "network-only",
+    })
+      .valueChanges
+      .subscribe( ({ data, loading }) => {
+        this.loading = loading;
+        this.posts = data.movimientosNoId;
+        resolve(this.posts);
+      }, error=> {
+        //console.log(error);
+       // console.log("entro a un error");
+        reject (false);
+      });
+    });
+  }
+
   getBrokers(idEmpresd:string){
     return new Promise((resolve, reject)=>{
       const GET_POST = gql`
