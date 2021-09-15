@@ -94,7 +94,7 @@ export class InicioComponent implements OnInit {
   getMovimientos(){
     this.isdImss = [];
     this.idseSE.buscaMovimentosnoId().then((resp:any)=>{
-      console.log(resp)
+      //console.log(resp)
       this.isdImss = resp
     })
   }
@@ -525,6 +525,7 @@ export class InicioComponent implements OnInit {
       this.registerForm.controls["subdelegacion"].setValue(amp.subdelegacion);
       this.registerForm.controls["diaDesempleo"].setValue(amp.diaDesempleo);
       this.registerForm.controls["costoDiario"].setValue(amp.costoDiario);
+      this.registerForm.controls["tipoAfiliacion"].setValue(amp.tipoAfiliacion);
       this.idMovimiento = amp._id;
     }
     actualizarMovimiento(){
@@ -573,7 +574,12 @@ export class InicioComponent implements OnInit {
       this.idseSE.upadteMovimiento(inputMovimiento).then(resp=>{
         if(resp){
           alerta(true, "Actualizado correctamente");
-          this.limpiarGrid();
+         if(this.selectedEmp != ""){
+            this.buscaBrokers()
+         }else{
+          this.getMovimientos()
+         }
+         
         }else{
           alerta(false, "ha odurrido un error")
         }
