@@ -1,6 +1,6 @@
 export interface Brokers {
     _id?: string;
-    registroPatronal?: string;
+    registroPatronal?: any;
     broker?: string;
     usuario?: string;
     status?: number;
@@ -59,6 +59,7 @@ export interface IDSIMSS {
     costoDiario? :string;
     tipoAfiliacion: string;
     registroPatronal?: registroP
+    generarArchi?: boolean
 }
 
 export interface statusMovimiento {

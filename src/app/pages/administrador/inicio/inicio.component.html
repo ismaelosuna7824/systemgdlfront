@@ -13,6 +13,7 @@
                                     <div class="col-6">
                                         <label for="">Cargar Archivo EMA</label>
                                         <input type="file" class="form-control" (change)="cargaEMA($event)" >
+                                        <button type="button" class="btn btn-block btn-primary mb-3" id="botonCargaDatos" data-bs-toggle="modal" data-bs-target="#modalCargaDatos" hidden >ver toda la informacion</button>
                                         <label for="" *ngIf="mustraLoading">Cargando ...</label>
                                     </div>
                                     <div class="col-6">
@@ -30,9 +31,9 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-3 col-md-12">
                                     <div>
-                                        <label for="first_name">Clientes</label>
+                                        <label for="first_name">Clientes | Registro Patronal</label>
                                         <ng-select [(ngModel)]="selectedEmp" [ngModelOptions]="{standalone: true}">
-                                            <ng-option *ngFor="let car of brokers" [value]="car._id">{{car.broker}}</ng-option>
+                                            <ng-option *ngFor="let car of brokers" [value]="car._id">{{car.broker}} | {{car.registroPatronal.nombre}} </ng-option>
                                          </ng-select>
                                     </div>
                                 </div>
@@ -40,7 +41,7 @@
                                     <div>
                                         <label for="">Registro Patronal</label>
                                         <ng-select [(ngModel)]="idPatronal" [ngModelOptions]="{standalone: true}">
-                                            <ng-option *ngFor="let car of patronales" [value]="car.numeroPatronal">{{car.nombre}}</ng-option>
+                                            <ng-option *ngFor="let car of patronales" [value]="car._id">{{car.nombre}}</ng-option>
                                          </ng-select>
                                         <label for="" hidden>Registro Patronal</label>
                                         <input type="text" hidden class="form-control" >
@@ -76,7 +77,7 @@
             </div>
         </div>
       
-        <div class="col-12">
+        <div class="col-12" style="padding-bottom: 30px;">
             <div class="row">
                 <div class="col-12">
                     <div class="card border-0 shadow">
@@ -107,6 +108,7 @@
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th></th>
                                     <th class="border-bottom text-center">Cliente</th>
                                     <th class="border-bottom text-center">FECHA RECEPCION</th>
                                     <th class="border-bottom text-center">NSS</th>
@@ -119,10 +121,12 @@
                                     <th class="border-bottom text-center">FECHA DE BAJA</th> -->
                                     <!-- <th class="border-bottom text-center">DIAS</th> -->
                                     <!-- <th class="border-bottom text-center">EMA MES</th> -->
+                                   
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
+                                    <td><input type="checkbox" class="form-check-input" [(ngModel)]="emp.generarArchi"></td>
                                     <td [style]="validaColor(emp.numSocial, emp.apellidoPaterno ,  emp.nombres , emp.subdelegacion , emp.umf, emp.costoDiario, emp.tipoAfiliacion)" >{{emp.idEmpresa.broker}}</td>
                                     <td>{{emp.fechaMovimiento}}</td>
                                     <td>{{emp.numSocial}}</td>
@@ -386,4 +390,24 @@
             </div>
         </div>
     </div>
+
+   
+
+     <div class="modal fade" id="modalCargaDatos" tabindex="-1" role="dialog" aria-labelledby="modalCargaDatos" aria-hidden="true" data-bs-backdrop="static" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content py-xl-4">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="recargaPage()"></button>
+                </div>
+                <div class="modal-body text-center py-3">
+                    <label for=""> Cargando Archivo {{conteoDatos}} De  {{totalDatos}} </label>
+                    <br>
+                    <label for="" *ngIf="retificandoDatos" > Total de errores {{volverAcargarTotal}} </label>
+                    <label for="" *ngIf="retificandoDatos" style="color: red;">{{mensageError}}</label>
+                    <br>
+                    <button class="btn btn-primary" *ngIf="retificandoDatos" (click)="vulveAcargar()">Descargar archivo con error</button> 
+                </div> 
+            </div>
+        </div>
+    </div> 
 </main>

@@ -42,6 +42,7 @@ export interface MovimientosAPI {
     invelidezVidaObrero: string,
     guarderiasPrestacionesSociales: string
     total: string 
+    fecha: string
 }
 
 
@@ -64,4 +65,5 @@ export interface ArchivoEBa {
   amortizacion: string,
   subtotalInfonavit: string,
   total: string    
+  fecha:string
 }

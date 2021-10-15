@@ -32,6 +32,16 @@ export class InicioComponent implements OnInit {
   data: AOA = [[1, 2], [3, 4]];
 
   mustraLoading = false;
+
+  conteoDatos:number = 0;
+  totalDatos: number = 0;
+  errorEndatos:any[]= [];
+
+  retificandoDatos:boolean = false
+  volverAcargar:number = 0
+  volverAcargarTotal:number = 0
+  mensageError:string = "";
+
   constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService, private patronalService: PatronalService) { }
 
   ngOnInit(): void {
@@ -87,6 +97,7 @@ export class InicioComponent implements OnInit {
 
   getBrokers(){
     this.brokersService.getBrokers().then((resp:any)=>{
+      //console.log(resp)
       this.brokers = resp;
     });
   }
@@ -95,24 +106,71 @@ export class InicioComponent implements OnInit {
     this.isdImss = [];
     this.idseSE.buscaMovimentosnoId().then((resp:any)=>{
       //console.log(resp)
-      this.isdImss = resp
+      let tp:any = resp
+
+      let temp = tp.map((obj:any)=> ({... obj,generarArchi : true }))
+
+      this.isdImss = temp
+
     })
+    // location.reload()
   }
 
   buscaBrokers(){
     //alert(this.selectedEmp)
     this.isdImss = [];
-    const validaDuplicado = this.isdImss.filter(e => e.idEmpresa._id === this.selectedEmp);
+    // const validaDuplicado = this.isdImss.filter(e => e.idEmpresa._id === this.selectedEmp);
 
-    if(validaDuplicado.length == 0){
+    // if(validaDuplicado.length == 0){
+     
+    // }else{
+     
+    // }
+    //alert(this.selectedEmp)
+    if(this.selectedEmp != ""){
       this.idseSE.getBrokers(this.selectedEmp).then((resp:any)=>{
 
-        this.isdImss.push(... resp);
+        //this.isdImss.push(... resp);
          //console.log(resp);
+         let tp:any = resp
+  
+         let temp = tp.map((obj:any)=> ({... obj, generarArchi : true }))
+   
+         this.isdImss = temp
+
+         //console.log(this.isdImss)
+  
       });
-    }else{
-     
+    }else if(this.idPatronal != ""){
+      this.isdImss = [];
+      this.idseSE.buscaMovimentosnoId().then((resp:any)=>{
+        //console.log(resp)
+        let tp:any = resp
+  
+        let temp = tp.map((obj:any)=> ({... obj,generarArchi : true }))
+  
+        this.isdImss =  temp.filter((x:any) => x.registroPatronal._id == this.idPatronal)
+
+       
+        
+  
+      })
     }
+    // else if(this.idPatronal != "" && this.selectedEmp != ""){
+    //   this.idseSE.getBrokers(this.selectedEmp).then((resp:any)=>{
+
+    //     //this.isdImss.push(... resp);
+    //      console.log(resp);
+
+    //     //  let tp:any = resp
+  
+    //     //  let temp = tp.map((obj:any)=> ({... obj, generarArchi : true }))
+   
+    //     //  this.isdImss = temp
+  
+    //   });
+    // }
+    
     
   }
 
@@ -139,65 +197,70 @@ export class InicioComponent implements OnInit {
       if(item.tipoMovimiento == "ALTA" || item.tipoMovimiento == "Reingreso"){
 
         if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
-
+          console.log("error")
         }else{
-        statusActualizar.push(item._id);
+          console.log("solo entra 1")
+          if(item.generarArchi){
+            console.log(item)
+            statusActualizar.push(item._id);
 
-        MovimientoApi.push({
-          cliente: item.idEmpresa.broker,
-          broker: item.registroPatronal.nombre,
-          registroPatronal: item.registroPatronal.numeroPatronal,
-          tipoMovimiento: item.tipoMovimiento,
-          nombreCompleto: item.nombreCompleto,
-          nss: item.numSocial,
-          salarioDiario: item.sd.toString(),
-          curp: item.curp,
-          fechaMovimiento: item.fechaMovimiento,
-          tipoTrabajador: item.tipoTrabajador,
-          tipoSalario: item.tipoSalario,
-          tipoJornada: item.tipoJornada,
-          umf: item.umf,
-          subDelegacion: item.subdelegacion,
-          fechaAlta: `${newDate}`,
-          rfc: item.rfc,
-          numeroCredito: item.numeroCredito.toString(),
-          incidencia: item.incidencia,
-          fechaBaja: item.fechaBaja,
-          diaDesempleo: item.diaDesempleo,
-          causaBaja: item.causaBaja
-        });
-        
-        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
-        RegistroPatronal = RegistroPatronal.padEnd(49);
+            MovimientoApi.push({
+              cliente: item.idEmpresa.broker,
+              broker: item.registroPatronal.nombre,
+              registroPatronal: item.registroPatronal.numeroPatronal,
+              tipoMovimiento: item.tipoMovimiento,
+              nombreCompleto: item.nombreCompleto,
+              nss: item.numSocial,
+              salarioDiario: item.sd.toString(),
+              curp: item.curp,
+              fechaMovimiento: item.fechaMovimiento,
+              tipoTrabajador: item.tipoTrabajador,
+              tipoSalario: item.tipoSalario,
+              tipoJornada: item.tipoJornada,
+              umf: item.umf,
+              subDelegacion: item.subdelegacion,
+              fechaAlta: `${newDate}`,
+              rfc: item.rfc,
+              numeroCredito: item.numeroCredito.toString(),
+              incidencia: item.incidencia,
+              fechaBaja: item.fechaBaja,
+              diaDesempleo: item.diaDesempleo,
+              causaBaja: item.causaBaja
+            });
+            
+            let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
+            RegistroPatronal = RegistroPatronal.padEnd(49);
 
-        //console.log(item.registroPatronal.numeroPatronal );
+            //console.log(item.registroPatronal.numeroPatronal );
 
-        let Apellido = item.apellidoMaterno;
-        Apellido = Apellido.padEnd(27);
+            let Apellido = item.apellidoMaterno;
+            Apellido = Apellido.padEnd(27);
 
-        let Nombre = item.nombres;
-        Nombre = Nombre.padEnd(27);
+            let Nombre = item.nombres;
+            Nombre = Nombre.padEnd(27);
 
-        let fecha = item.fechaMovimiento.split("-");
-        let Salario = this.nuevoSalario(item.sd.toString())  + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf ;
-        Salario = Salario.padEnd(28);
+            let fecha = item.fechaMovimiento.split("-");
+            let Salario = this.nuevoSalario(item.sd.toString())  + "000000" + item.tipoTrabajador + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}` + item.umf ;
+            Salario = Salario.padEnd(28);
 
-        SubDelegacion = "08" + item.subdelegacion;
-        NumeroSubDelegacion = item.subdelegacion;
-        SubDelegacion = SubDelegacion.padEnd(18);
+            SubDelegacion = "08" + item.subdelegacion;
+            NumeroSubDelegacion = item.subdelegacion;
+            SubDelegacion = SubDelegacion.padEnd(18);
 
-        let Curp = item.curp + "9";
+            let Curp = item.curp + "9";
 
 
-            Linea = RegistroPatronal +
-                    Apellido +
-                    Nombre +
-                    Salario +
-                    SubDelegacion +
-                    `${Curp}\r\n`;
-          nTotalRegistros++;
+                Linea = RegistroPatronal +
+                        Apellido +
+                        Nombre +
+                        Salario +
+                        SubDelegacion +
+                        `${Curp}\r\n`;
+              nTotalRegistros++;
 
-          Archivo.push(Linea);
+              Archivo.push(Linea);
+          }
+
         }
 
       //alert("el tipo es " + item.tipoTrabajador)
@@ -255,61 +318,63 @@ export class InicioComponent implements OnInit {
 
         }else{
 
-        statusActualizar.push(item._id);
+          if(item.generarArchi){
+            statusActualizar.push(item._id);
 
-        MovimientoApi.push({
-          cliente: item.idEmpresa.broker,
-          broker: item.registroPatronal.nombre,
-          registroPatronal: item.registroPatronal.numeroPatronal,
-          tipoMovimiento: item.tipoMovimiento,
-          nombreCompleto: item.nombreCompleto,
-          nss: item.numSocial,
-          salarioDiario: item.sd.toString(),
-          curp: item.curp,
-          fechaMovimiento: item.fechaMovimiento,
-          tipoTrabajador: item.tipoTrabajador,
-          tipoSalario: item.tipoSalario,
-          tipoJornada: item.tipoJornada,
-          umf: item.umf,
-          subDelegacion: item.subdelegacion,
-          fechaAlta: `${newDate}`,
-          rfc: item.rfc,
-          numeroCredito: item.numeroCredito.toString(),
-          incidencia: item.incidencia,
-          fechaBaja: item.fechaBaja,
-          diaDesempleo: item.diaDesempleo,
-          causaBaja: item.causaBaja
-        });
-
-        let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
-        RegistroPatronal = RegistroPatronal.padEnd(49);
-
-        let Apellido = item.apellidoMaterno;
-        Apellido = Apellido.padEnd(27);
-
-        let Nombre = item.nombres;
-        Nombre = Nombre.padEnd(27);
-
-        let fecha = item.fechaMovimiento.split("-");
-        let Salario = this.nuevoSalario(item.sd.toString()) + "0000000" + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}`;
-        Salario = Salario.padEnd(28);
-
-        SubDelegacion = "07" + item.subdelegacion;
-        NumeroSubDelegacion = item.subdelegacion;
-        SubDelegacion = SubDelegacion.padEnd(18);
-
-        let Curp = item.curp + "9";
-
-
-        Linea = RegistroPatronal +
-            Apellido +
-            Nombre +
-            Salario +
-            SubDelegacion +
-            `${Curp}\r\n`;
-
-        nTotalRegistros++;
-        Archivo.push(Linea);
+            MovimientoApi.push({
+              cliente: item.idEmpresa.broker,
+              broker: item.registroPatronal.nombre,
+              registroPatronal: item.registroPatronal.numeroPatronal,
+              tipoMovimiento: item.tipoMovimiento,
+              nombreCompleto: item.nombreCompleto,
+              nss: item.numSocial,
+              salarioDiario: item.sd.toString(),
+              curp: item.curp,
+              fechaMovimiento: item.fechaMovimiento,
+              tipoTrabajador: item.tipoTrabajador,
+              tipoSalario: item.tipoSalario,
+              tipoJornada: item.tipoJornada,
+              umf: item.umf,
+              subDelegacion: item.subdelegacion,
+              fechaAlta: `${newDate}`,
+              rfc: item.rfc,
+              numeroCredito: item.numeroCredito.toString(),
+              incidencia: item.incidencia,
+              fechaBaja: item.fechaBaja,
+              diaDesempleo: item.diaDesempleo,
+              causaBaja: item.causaBaja
+            });
+    
+            let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
+            RegistroPatronal = RegistroPatronal.padEnd(49);
+    
+            let Apellido = item.apellidoMaterno;
+            Apellido = Apellido.padEnd(27);
+    
+            let Nombre = item.nombres;
+            Nombre = Nombre.padEnd(27);
+    
+            let fecha = item.fechaMovimiento.split("-");
+            let Salario = this.nuevoSalario(item.sd.toString()) + "0000000" + item.tipoSalario + item.tipoJornada + `${fecha[2]}${fecha[1]}${fecha[0]}`;
+            Salario = Salario.padEnd(28);
+    
+            SubDelegacion = "07" + item.subdelegacion;
+            NumeroSubDelegacion = item.subdelegacion;
+            SubDelegacion = SubDelegacion.padEnd(18);
+    
+            let Curp = item.curp + "9";
+    
+    
+            Linea = RegistroPatronal +
+                Apellido +
+                Nombre +
+                Salario +
+                SubDelegacion +
+                `${Curp}\r\n`;
+    
+            nTotalRegistros++;
+            Archivo.push(Linea);
+          }
         
       }
         
@@ -363,67 +428,69 @@ export class InicioComponent implements OnInit {
         if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
 
         }else{
-          statusActualizar.push(item._id);
+            if(item.generarArchi){
+              statusActualizar.push(item._id);
 
-          MovimientoApi.push({
-            cliente: item.idEmpresa.broker,
-            broker: item.registroPatronal.nombre,
-            registroPatronal: item.registroPatronal.numeroPatronal,
-            tipoMovimiento: item.tipoMovimiento,
-            nombreCompleto: item.nombreCompleto,
-            nss: item.numSocial,
-            salarioDiario: item.sd.toString(),
-            curp: item.curp,
-            fechaMovimiento: item.fechaMovimiento,
-            tipoTrabajador: item.tipoTrabajador,
-            tipoSalario: item.tipoSalario,
-            tipoJornada: item.tipoJornada,
-            umf: item.umf,
-            subDelegacion: item.subdelegacion,
-            fechaAlta: `${newDate}`,
-            rfc: item.rfc,
-            numeroCredito: item.numeroCredito.toString(),
-            incidencia: item.incidencia,
-            fechaBaja: item.fechaBaja,
-            diaDesempleo: item.diaDesempleo,
-            causaBaja: item.causaBaja
-          });
+                MovimientoApi.push({
+                  cliente: item.idEmpresa.broker,
+                  broker: item.registroPatronal.nombre,
+                  registroPatronal: item.registroPatronal.numeroPatronal,
+                  tipoMovimiento: item.tipoMovimiento,
+                  nombreCompleto: item.nombreCompleto,
+                  nss: item.numSocial,
+                  salarioDiario: item.sd.toString(),
+                  curp: item.curp,
+                  fechaMovimiento: item.fechaMovimiento,
+                  tipoTrabajador: item.tipoTrabajador,
+                  tipoSalario: item.tipoSalario,
+                  tipoJornada: item.tipoJornada,
+                  umf: item.umf,
+                  subDelegacion: item.subdelegacion,
+                  fechaAlta: `${newDate}`,
+                  rfc: item.rfc,
+                  numeroCredito: item.numeroCredito.toString(),
+                  incidencia: item.incidencia,
+                  fechaBaja: item.fechaBaja,
+                  diaDesempleo: item.diaDesempleo,
+                  causaBaja: item.causaBaja
+                });
 
 
-          let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
-          RegistroPatronal = RegistroPatronal.padEnd(49);
-  
-          let Apellido = item.apellidoMaterno;
-          Apellido = Apellido.padEnd(27);
-  
-          let Nombre = item.nombres;
-          Nombre = Nombre.padEnd(42);
-  
-          let fecha = item.fechaMovimiento.split("-");
-          let Fecha = `${fecha[2]}${fecha[1]}${fecha[0]}`;
-          Fecha = Fecha.padEnd(13);
-  
-          SubDelegacion = "02" + item.subdelegacion;
-          NumeroSubDelegacion = item.subdelegacion;
-          SubDelegacion = SubDelegacion.padEnd(17);
-  
-          let CausaBaja = item.causaBaja;
-          CausaBaja = CausaBaja.padEnd(19);
-  
-          let final = "9";
-  
-  
-          Linea = RegistroPatronal +
-              Apellido +
-              Nombre +
-              Fecha +
-              SubDelegacion +
-              CausaBaja +
-              `${final}\r\n`;
-  
-          nTotalRegistros++;
+                let RegistroPatronal = (NuevoRegostroPatronal == ""  ? item.registroPatronal.numeroPatronal : NuevoRegostroPatronal) + item.numSocial + item.apellidoPaterno; //50
+                RegistroPatronal = RegistroPatronal.padEnd(49);
         
-          Archivo.push(Linea);
+                let Apellido = item.apellidoMaterno;
+                Apellido = Apellido.padEnd(27);
+        
+                let Nombre = item.nombres;
+                Nombre = Nombre.padEnd(42);
+        
+                let fecha = item.fechaMovimiento.split("-");
+                let Fecha = `${fecha[2]}${fecha[1]}${fecha[0]}`;
+                Fecha = Fecha.padEnd(13);
+        
+                SubDelegacion = "02" + item.subdelegacion;
+                NumeroSubDelegacion = item.subdelegacion;
+                SubDelegacion = SubDelegacion.padEnd(17);
+        
+                let CausaBaja = item.causaBaja;
+                CausaBaja = CausaBaja.padEnd(19);
+        
+                let final = "9";
+        
+        
+                Linea = RegistroPatronal +
+                    Apellido +
+                    Nombre +
+                    Fecha +
+                    SubDelegacion +
+                    CausaBaja +
+                    `${final}\r\n`;
+        
+                nTotalRegistros++;
+              
+                Archivo.push(Linea);
+            }
         }
         
       }
@@ -601,6 +668,7 @@ export class InicioComponent implements OnInit {
       });
     }
     limpiarGrid(){
+      location.reload()
       this.isdImss = [];
     }
     validaColor(numSocial:any, apellidoPaterno:any , nombres:any, subdelegacion:any , umf:any, costoDiario:any, tipoAfiliacion: any){
@@ -635,7 +703,9 @@ export class InicioComponent implements OnInit {
         });
       }
       setTimeout(() => {
+        document.getElementById('botonCargaDatos').click()
         this.mustraLoading = true;
+       
         data.forEach((ele, ind)=>{
        // console.log(ele['Origen del Movimiento'])
          //console.log(ele[ind].NSS)
@@ -659,26 +729,60 @@ export class InicioComponent implements OnInit {
             invelidezVidaObrero: ele['Invalidez y Vida Obrero'].toString(),
             guarderiasPrestacionesSociales: ele['Guarderías y Prestaciones Sociales'].toString(),
             total: ele['Total'].toString(),
-            
+            fecha: this.formatDate()
           })
         });
+        this.totalDatos = ArchivoEm.length;
+
         setTimeout(() => {
-            // console.log(ArchivoEm)
-            this.idseSE.cargarArchivosEMASQL(ArchivoEm).then(resp=>{
-              if(resp){
-                alerta(true, "Archivo cargado correctamente");
-                this.mustraLoading = false;
-                location.reload();
-              }else{
-                alerta(false, "ha ocurrido un error")
-              }
-            });
+
+             //console.log(ArchivoEm)
+            for (const key in ArchivoEm) {
+              
+              this.idseSE.cargarArchivosEMASQL(ArchivoEm[key]).then((resp:any)=>{
+               
+                if(resp.status){
+                 // alerta(true, "Archivo cargado correctamente");
+                  this.mustraLoading = false;
+                  this.conteoDatos++;
+                }else{
+                  this.retificandoDatos = true;
+                  
+                  this.errorEndatos.push({
+                    "NSS": ArchivoEm[key].nss.toString(),
+                    "Nombre": ArchivoEm[key].nombreCompleto.toString(),
+                    "Origen del Movimiento": ArchivoEm[key].origenMovimiento.toString(),
+                    "Tipo del Movimiento":  ArchivoEm[key].tipoMovimiento.toString(),
+                    "Fecha del Movimiento":  ArchivoEm[key].fechaMovimiento.toString(),
+                    "Días": ArchivoEm[key].dias,
+                    "Salario Diario": ArchivoEm[key].salarioDiario,
+                    "Cuota Fija": ArchivoEm[key].cuotaFija,
+                    "Excedente Patronal": ArchivoEm[key].excedentePatronal,
+                    "Excedente Obrero":  ArchivoEm[key].excedenteObrero,
+                    "Prestaciones en Dinero Patronal":   ArchivoEm[key].prestasionesDineroPatronal,
+                    "Prestaciones en Dinero Obrero": ArchivoEm[key].prestasionesDineroObrero,
+                    "Gastos Médicos y Pensionados Patronal": ArchivoEm[key].gastoMedicosPensionadosPatronal,
+                    "Gastos Médicos y Pensionados Obrero": ArchivoEm[key].gastoMedicosPensionadosObrero,
+                    "Riesgos de Trabajo":  ArchivoEm[key].riesgoTrabajo,
+                    "Invalidez y Vida Patronal":  ArchivoEm[key].invalidezVidaPatronal,
+                    "Invalidez y Vida Obrero": ArchivoEm[key].invelidezVidaObrero,
+                    "Guarderías y Prestaciones Sociales":  ArchivoEm[key].guarderiasPrestacionesSociales,
+                    "Total": ArchivoEm[key].total,
+                  })
+                  this.volverAcargarTotal = this.errorEndatos.length
+                  this.mensageError = resp.message
+                  //alerta(false, "ha ocurrido un error")
+                }
+              });
+            }
         }, 1000);
       }, 2000);
       // this.idseSE.cargaMovimientos().subscribe(resp=>{
       //   console.log(resp);
       // });
     }
+
+    ////////////////////////////////////////////////////////////////////////
     cargaEBA(ev:any){
       let ConvertOJson!:string; 
       let ArchivoEm: ArchivoEBa[] = []
@@ -699,8 +803,11 @@ export class InicioComponent implements OnInit {
           
         });
       }
+      
+      
       setTimeout(() => {
         this.mustraLoading = true;
+        document.getElementById('botonCargaDatos').click()
         data.forEach((ele, ind)=>{
        // console.log(ele['Origen del Movimiento'])
          //console.log(ele[ind].NSS)
@@ -723,19 +830,46 @@ export class InicioComponent implements OnInit {
             amortizacion: ele['Amortización'].toString(),
             subtotalInfonavit: ele['Subtotal Infonavit'].toString(), 
             total: ele['Total'].toString(),
+            fecha: this.formatDate()
           })
         });
+        this.totalDatos = ArchivoEm.length;
         setTimeout(() => {
            //console.log(ArchivoEm)
-            this.idseSE.cargarArchivosEBASQL(ArchivoEm).then(resp=>{
-              if(resp){
+           for (const key in ArchivoEm) {
+            this.idseSE.cargarArchivosEBASQL(ArchivoEm[key]).then((resp:any)=>{
+              if(resp.status){
+               
                 this.mustraLoading = false;
-                alerta(true, "Archivo cargado correctamente");
-                location.reload();
+                  this.conteoDatos++;
               }else{
-                alerta(false, "ha ocurrido un error")
+                this.retificandoDatos = true;
+                  
+                this.errorEndatos.push({
+                  "NSS": ArchivoEm[key].nss,
+                  "Nombre": ArchivoEm[key].nombreCompleto,
+                  "Origen del Movimiento": ArchivoEm[key].origenMovimiento,
+                  "Tipo del Movimiento": ArchivoEm[key].tipoMovimiento,
+                  "Fecha del Movimiento":  ArchivoEm[key].fechaMovimiento,
+                  "Días": ArchivoEm[key].dias,
+                  "Salario Diario": ArchivoEm[key].salarioDiario,
+                  "Retiro": ArchivoEm[key].retiro,
+                  "Cesantía en Edad Avanzada y Vejez Patronal": ArchivoEm[key].cesantiaEdadAvanzadaPatronal,
+                  "Cesantía en Edad Avanzada y Vejez Obrero": ArchivoEm[key].censatiaEdadAvanzadaObrero,
+                  "Subtotal RCV": ArchivoEm[key].subtotalRCV,
+                  "Aportación Patronal": ArchivoEm[key].aportacionPatronal,
+                  "Tipo de Descuento": ArchivoEm[key].tipoDescuento,
+                  "Valor de Descuento": ArchivoEm[key].valorDescuento,
+                  "Número de Crédito": ArchivoEm[key].numeroCredito,
+                  "Amortización": ArchivoEm[key].amortizacion,
+                  "Subtotal Infonavit": ArchivoEm[key].subtotalInfonavit, 
+                  "Total":  ArchivoEm[key].total,
+                })
+                this.volverAcargarTotal = this.errorEndatos.length
+                this.mensageError = resp.message
               }
             });
+           }
         }, 1000);
       }, 2000);
       // this.idseSE.cargaMovimientos().subscribe(resp=>{
@@ -743,8 +877,10 @@ export class InicioComponent implements OnInit {
       // });
     }
     converdate(date: string):string{
-      console.log(date);
-        if(date == "-"){
+      //console.log(date);
+      //let validDate = 
+        if(date == undefined || date == "-"){
+         
           return "01/01/0000";
         }else{
           let  today = new Date(date);
@@ -752,7 +888,8 @@ export class InicioComponent implements OnInit {
           var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
           var yyyy = today.getFullYear();
           let newDate =  mm + '/' + dd + '/' + yyyy;
-          return `${newDate}`;
+          //return newDate === "NaN/NaN/NaN" ? `01/01/0000` : `${newDate}`;
+          return `${newDate}`
         }
     }
     pruebaHttp(){
@@ -760,4 +897,47 @@ export class InicioComponent implements OnInit {
         console.log(resp);
       })
     }
+    vulveAcargar(){
+      // this.retificandoDatos = true;
+      // this.volverAcargarTotal = this.errorEndatos.length
+      // for (const key in this.errorEndatos) {
+              
+      //   this.idseSE.cargarArchivosEMASQL(this.errorEndatos[key]).then((resp:any)=>{
+      //     ///console.log(resp)
+      //     if(resp.status){
+      //      // alerta(true, "Archivo cargado correctamente");
+      //       this.mustraLoading = false;
+      //       this.volverAcargar++;
+      //       //console.log("volver a cargar bien")
+      //     }else{
+      //       this.mensageError = resp.message
+      //       console.log("volver a cargar mal")
+      //       //this.errorEndatos.push(this.errorEndatos[key])
+      //       //alerta(false, "ha ocurrido un error")
+      //     }
+      //   });
+      // }
+          const workBook = XLSX.utils.book_new(); // create a new blank book
+        const workSheet = XLSX.utils.json_to_sheet(this.errorEndatos);
+
+        XLSX.utils.book_append_sheet(workBook, workSheet, 'data'); // add the worksheet to the book
+        XLSX.writeFile(workBook, 'temp.xlsx');
+      //console.log(this.errorEndatos)
+    }
+    recargaPage(){
+      location.reload()
+    }
+    formatDate() {
+      var d = new Date(),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+  
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+  
+      return [year, month, day].join('-');
+  }
 }

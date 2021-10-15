@@ -51,4 +51,6 @@ export interface IDSMO {
     diaDesempleo?: number
 
     costoDiario?: string;
+
+    
 }

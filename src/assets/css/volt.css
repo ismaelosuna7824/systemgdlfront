@@ -6750,6 +6750,7 @@ textarea.form-control-lg {
 }
 
 .nav {
+    
     display: flex;
     flex-wrap: wrap;
     padding-left: 0;
@@ -6761,6 +6762,7 @@ textarea.form-control-lg {
     display: block;
     padding: 0.5rem 1rem;
     color: #1F2937;
+    
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 

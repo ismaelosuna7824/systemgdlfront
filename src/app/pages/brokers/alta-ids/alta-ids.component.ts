@@ -84,7 +84,8 @@ export class AltaIdsComponent implements OnInit {
         subdelegacion: "00000",
         status: 0,
         diaDesempleo: 1,
-        costoDiario: parseFloat(emp[0].costoDiario).toFixed(2)
+        costoDiario: parseFloat(emp[0].costoDiario).toFixed(2),
+        
       });
     }else{
       alerta(false, "error, este empleado ya ha sido agregado a la lista")

@@ -252,7 +252,7 @@ export class InicioService {
   cargarArchivosEMASQL(datos:any){
     return new Promise((resolve, reject)=>{
       const Register = gql`
-          mutation insertMovimientoSql($movimiento: [CargaArchivoEMAInput]){
+          mutation insertMovimientoSql($movimiento: CargaArchivoEMAInput){
             cargaArchivosEMASQL(movimiento: $movimiento){
                 status
                 message
@@ -268,7 +268,7 @@ export class InicioService {
           //console.log(data);
           this.posts = data;
           //console.log(this.posts.registerProduct.product.id);
-          resolve (this.posts.cargaArchivosEMASQL.status);
+          resolve ({status: this.posts.cargaArchivosEMASQL.status, message: this.posts.cargaArchivosEMASQL.message});
         }, err =>{
           resolve(false);
         });
@@ -277,7 +277,7 @@ export class InicioService {
   cargarArchivosEBASQL(datos:any){
     return new Promise((resolve, reject)=>{
       const Register = gql`
-          mutation insertMovimientoSql($movimiento: [CargaArchivoEBAInput]){
+          mutation insertMovimientoSql($movimiento: CargaArchivoEBAInput){
             cargaArchivosEBASQL(movimiento: $movimiento){
                 status
                 message
@@ -293,7 +293,7 @@ export class InicioService {
           //console.log(data);
           this.posts = data;
           //console.log(this.posts.registerProduct.product.id);
-          resolve (this.posts.cargaArchivosEBASQL.status);
+          resolve ({ status: this.posts.cargaArchivosEBASQL.status, message: this.posts.cargaArchivosEBASQL.message});
         }, err =>{
           resolve(false);
         });
