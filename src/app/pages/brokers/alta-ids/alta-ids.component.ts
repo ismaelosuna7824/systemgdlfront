@@ -100,6 +100,8 @@ export class AltaIdsComponent implements OnInit {
     for (const key in this.idse) {
         this.idse[key].sd = parseFloat(this.idse[key].sd).toFixed(2);
         this.idse[key].diaDesempleo = parseFloat(this.idse[key].diaDesempleo.toString());
+        this.idse[key].costoDiario = this.idse[key].costoDiario.toString()
+
     }
     //console.log(this.idse)
     const datBaja = this.idse.filter(epm=> epm.tipoMovimiento == "BAJA").filter(dta => dta.fechaBaja == "" );

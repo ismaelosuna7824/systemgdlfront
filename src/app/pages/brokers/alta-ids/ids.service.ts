@@ -15,7 +15,7 @@ export class IdsService {
 
 
   registerIds(empleado: IDSMO[]){
-    console.log(empleado)
+    //console.log(empleado)
     return new Promise((resolve, reject)=>{
       const Register = gql`
            mutation registerMovimiento($movimiento:MovimientosInputList){
