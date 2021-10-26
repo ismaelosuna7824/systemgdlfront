@@ -18,6 +18,7 @@ import { BrokersComponent } from './pages/administrador/brokers/brokers.componen
 import { StatusMovimientosComponent } from './pages/administrador/status-movimientos/status-movimientos.component';
 import { PatronalesComponent } from './pages/administrador/patronales/patronales.component';
 import { MovimientoBrokersComponent } from './pages/brokers/movimiento-brokers/movimiento-brokers.component';
+import { InicioPipe } from './pages/administrador/inicio/inicio.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MovimientoBrokersComponent } from './pages/brokers/movimiento-brokers/m
     BrokersComponent,
     StatusMovimientosComponent,
     PatronalesComponent,
-    MovimientoBrokersComponent
+    MovimientoBrokersComponent,
+    InicioPipe
   ],
   imports: [
     BrowserModule,

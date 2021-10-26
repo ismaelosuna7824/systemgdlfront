@@ -54,10 +54,7 @@
                                     <button class="btn btn-primary"  (click)="buscaBrokers()">Agregar</button>
                                     <br>
                                 </div>
-                                <div class="col-lg-2 col-md-12 col-sm-12">
-                                    <button class="btn btn-primary"  (click)="getMovimientos()">Actualizar</button>
-                                    <br>
-                                </div>
+                               
                                 <div class="col-lg-2 col-md-12 col-sm-12"> 
                                     <button class="btn btn-primary" (click)="exportaTXTALTA()">GENERAR SUA ALTA</button>
                                     <br>
@@ -95,13 +92,29 @@
                         </div>
                         <div class="table-responsive" style="overflow-y: hidden;">
                             <div style="padding: 10px;">
-                                <button class="btn btn-danger" (click)="limpiarGrid()">Limipiar</button>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="col-lg-2 col-md-12 col-sm-12">
+                                            <button class="btn btn-primary"  (click)="getMovimientos()">Actualizar</button>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <select name="" id="" class="form-select" [(ngModel)]="tipoMovimiento" [ngModelOptions]="{standalone: true}">
+                                             
+                                            <option [value]="item.nombre" *ngFor="let item of statusMovimitos">{{item.nombre}}</option>
+                                            <option value="">Todos los tipo de movimiento</option>
+                                         </select>
+                                    </div>
+                                </div>
+                               
+                                <button class="btn btn-danger" (click)="limpiarGrid()" hidden>Limipiar</button>
                                 <br>
                                 <div style="padding: 10px;">
                                    <div style="background-color: red; width: 20px; height: 20px; float: left; margin-right: 10px; border-radius: 10px;">
                                    </div>
                                    <div>
-                                       <label for="">Flatan campos por llenar</label>
+                                       <label for="">Faltan campos por llenar</label>
                                    </div>
                                 </div>
                             </div>
@@ -125,7 +138,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento; let i = index; ">
+                                <tr *ngFor="let emp of isdImss | buscar: buscaMovimiento | inicio: tipoMovimiento let i = index; ">
                                     <td><input type="checkbox" class="form-check-input" [(ngModel)]="emp.generarArchi"></td>
                                     <td [style]="validaColor(emp.numSocial, emp.apellidoPaterno ,  emp.nombres , emp.subdelegacion , emp.umf, emp.costoDiario, emp.tipoAfiliacion)" >{{emp.idEmpresa.broker}}</td>
                                     <td>{{emp.fechaMovimiento}}</td>

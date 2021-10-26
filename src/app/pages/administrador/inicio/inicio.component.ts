@@ -41,6 +41,7 @@ export class InicioComponent implements OnInit {
   volverAcargar:number = 0
   volverAcargarTotal:number = 0
   mensageError:string = "";
+  tipoMovimiento:string = "";
 
   constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService, private patronalService: PatronalService) { }
 
