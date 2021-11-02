@@ -72,20 +72,20 @@
                                     <th class="border-bottom text-center"><div style="width: 250px;">Nombre Completo</div></th>
                                     <th class="border-bottom text-center">Numero de Seguro Social</th>
                                     <th class="border-bottom text-center"><div style="width: 120px;">SDI</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 120px;">Costo Diario</div></th>
+                                    <th hidden class="border-bottom text-center"><div style="width: 120px;">Costo Diario</div></th>
                                     <th hidden class="border-bottom text-center">Salario Integrado</th>
                                     <th class="border-bottom text-center"><div style="width: 300px;">CURP</div></th>
                                     <th class="border-bottom text-center"><div style="width: 300px;">RFC</div></th>
                                     <th class="border-bottom text-center">Fecha que se dara el Movimiento</th>
-                                    <th class="border-bottom text-center">Con Aportación a Infonavit</th>
-                                    <th class="border-bottom text-center">Cuanta con credito infonavit vigente?</th>
-                                    <th class="border-bottom text-center">Numero de Credito</th>
-                                    <th class="border-bottom text-center">Monto a descontar CF VSM FD %</th>
-                                    <th class="border-bottom text-center">Salario Base</th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center">Con Aportación a Infonavit</th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center">Cuanta con credito infonavit vigente?</th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center">Numero de Credito</th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'"class="border-bottom text-center">Monto a descontar CF VSM FD %</th>
+                                    <th hidden class="border-bottom text-center">Salario Base</th>
                                     <th hidden class="border-bottom text-center"><div style="width: 250px;">Clave trabajador</div></th>
-                                    <th class="border-bottom text-center">Tipo Trabajador</th>
-                                    <th class="border-bottom text-center"><div style="width: 250px;">Tipo Salario</div></th>
-                                    <th class="border-bottom text-center"><div style="width: 250px;">Tipo Jornada</div></th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center">Tipo Trabajado</th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center"><div style="width: 250px;">Tipo Salario</div></th>
+                                    <th *ngIf="tipoMovimiento == 'ALTA'" class="border-bottom text-center"><div style="width: 250px;">Tipo Jornada</div></th>
                                     <th hidden class="border-bottom text-center">Semana de Jornada Reducida</th>
                                     <th hidden class="border-bottom text-center">Unidad de Medicina Familiar</th>
                                     <th hidden class="border-bottom text-center"><div style="width: 250px;">Guía</div></th>
@@ -93,9 +93,9 @@
                                     <th hidden class="border-bottom text-center">Identificador del Formato</th>
                                     <th hidden class="border-bottom text-center">Digíto identificador RP</th>
                                     <th hidden class="border-bottom text-center">Digíto identificador NSS</th>
-                                    <th  class="border-bottom text-center">Día de Desempleo</th>
-                                    <th  class="border-bottom text-center">Fecha de Baja</th>
-                                    <th  class="border-bottom text-center">Causa de Baja</th>
+                                    <th *ngIf="tipoMovimiento == 'BAJA'" class="border-bottom text-center">Día de Desempleo</th>
+                                    <th *ngIf="tipoMovimiento == 'BAJA'" class="border-bottom text-center">Fecha de Baja</th>
+                                    <th *ngIf="tipoMovimiento == 'BAJA'"  class="border-bottom text-center">Causa de Baja</th>
                                     
                                     <th hidden class="border-bottom text-center">Eliminar</th>
                                 </tr>
@@ -113,36 +113,36 @@
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.nombreCompleto" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.numSocial" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input  type="number" class="form-control" [(ngModel)]="emp.sd" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input  type="number" class="form-control" [(ngModel)]="emp.costoDiario" [ngModelOptions]="{standalone: true}"></td>
+                                    <td hidden><input  type="number" class="form-control" [(ngModel)]="emp.costoDiario" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioInt" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.curp" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.rfc" [ngModelOptions]="{standalone: true}"></td>
                                     <td><input onkeyup="this.value = this.value.toUpperCase();" type="date" class="form-control" [(ngModel)]="emp.fechaMovimiento"   [ngModelOptions]="{standalone: true}"></td>
-                                    <td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'">
                                         <select name="" id="" class="form-select"  [(ngModel)]="emp.aportacionInfonavid" [ngModelOptions]="{standalone: true}">
                                             <option value="SI">SI</option>
                                             <option value="NO">NO</option>
                                         </select>
                                         <!-- <input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.aportacionInfonavid" [ngModelOptions]="{standalone: true}"> -->
                                     </td>
-                                    <td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'">
                                         <select name="" id="" class="form-select"  [(ngModel)]="emp.creditoInfonavidVigente" [ngModelOptions]="{standalone: true}">
                                             <option value="SI">SI</option>
                                             <option value="NO">NO</option>
                                         </select>
                                         <!-- <input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.creditoInfonavidVigente" [ngModelOptions]="{standalone: true}"></td> -->
-                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.numeroCredito" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.montoDescuentoCFVSMFD" [ngModelOptions]="{standalone: true}"></td>
-                                    <td><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioBase" [ngModelOptions]="{standalone: true}"></td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'"><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.numeroCredito" [ngModelOptions]="{standalone: true}"></td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'"><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.montoDescuentoCFVSMFD" [ngModelOptions]="{standalone: true}"></td>
+                                    <td hidden><input onkeyup="this.value = this.value.toUpperCase();" type="number" class="form-control" [(ngModel)]="emp.salarioBase" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.claveTrabajador" [ngModelOptions]="{standalone: true}"></td>
-                                    <td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'">
                                         <select name="" id="" class="form-select" [(ngModel)]="emp.tipoTrabajador" [ngModelOptions]="{standalone: true}">
                                             <option value="1">Permanente</option>
                                             <option value="2">Eventual</option>
                                             <option value="3">Eventual Construccion</option>
                                         </select>
                                         <input hidden onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.tipoTrabajador" [ngModelOptions]="{standalone: true}"></td>
-                                    <td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'" >
                                         <select name="" id="" class="form-select" [(ngModel)]="emp.tipoSalario" [ngModelOptions]="{standalone: true}">
                                             <option value="0">Fijo</option>
                                             <option value="1">Variable</option>
@@ -150,7 +150,7 @@
                                         </select>
                                         <input hidden onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" >
                                     </td>
-                                    <td>
+                                    <td *ngIf="tipoMovimiento == 'ALTA'">
                                         <select name="" id="" class="form-select" [(ngModel)]="emp.tipoJornada" [ngModelOptions]="{standalone: true}">
                                             <option value="0">Jornada Completa</option>
                                             <option value="1"> 1 - numero de dias trabajados</option>
@@ -168,7 +168,7 @@
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.identificadorFormato" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorRP" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorNSS" [ngModelOptions]="{standalone: true}"></td>
-                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="tipoMovimiento == 'BAJA'">
                                         <select name="" id="" class="form-select"  [(ngModel)]="emp.diaDesempleo" [ngModelOptions]="{standalone: true}" >
                                             <option value="0" hidden>0</option>
                                             <option value="1">1</option>
@@ -178,10 +178,10 @@
                                             
                                         </select>
                                     </td>
-                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="tipoMovimiento == 'BAJA'">
                                         <input onkeyup="this.value = this.value.toUpperCase();" type="date" class="form-control" [(ngModel)]="emp.fechaBaja"   [ngModelOptions]="{standalone: true}">
                                     </td>
-                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="tipoMovimiento == 'BAJA'">
                                         
                                            
                                             <select name="" id="" class="form-select" [(ngModel)]="emp.causaBaja"   [ngModelOptions]="{standalone: true}">

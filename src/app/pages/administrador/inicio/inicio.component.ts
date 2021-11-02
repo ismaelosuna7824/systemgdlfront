@@ -42,6 +42,8 @@ export class InicioComponent implements OnInit {
   volverAcargarTotal:number = 0
   mensageError:string = "";
   tipoMovimiento:string = "";
+  tipoMovimientoEmp: string = "";
+
 
   constructor(private brokersService: BrokersService, private idseSE: InicioService, private formBuilder: FormBuilder,  private statuMoService: StatusmovimientosService, private patronalService: PatronalService) { }
 
@@ -50,7 +52,7 @@ export class InicioComponent implements OnInit {
     this.getStatus();
     this.initForm();
     this.getPatronales();
-    this.getMovimientos()
+    //this.getMovimientos()
   }
   initForm(){
     this.registerForm = this.formBuilder.group({
@@ -198,11 +200,11 @@ export class InicioComponent implements OnInit {
       if(item.tipoMovimiento == "ALTA" || item.tipoMovimiento == "Reingreso"){
 
         if(item.numSocial == "" ||  item.apellidoPaterno == "" || item.nombres == "" || item.subdelegacion == "" || item.umf == ""  || item.costoDiario == "" || item.costoDiario == null  || item.tipoAfiliacion == "" || item.tipoAfiliacion == null){
-          console.log("error")
+          //console.log("error")
         }else{
-          console.log("solo entra 1")
+          //console.log("solo entra 1")
           if(item.generarArchi){
-            console.log(item)
+            //console.log(item)
             statusActualizar.push(item._id);
 
             MovimientoApi.push({
@@ -555,6 +557,7 @@ export class InicioComponent implements OnInit {
     }
     llenaForm(amp:IDSIMSS){
       //console.log(amp)
+      this.tipoMovimientoEmp = amp.tipoMovimiento
       this.registerForm.controls["tipoMovimiento"].setValue(amp.tipoMovimiento);
       this.registerForm.controls["apellidoPaterno"].setValue(amp.apellidoPaterno);
       this.registerForm.controls["apellidoMaterno"].setValue(amp.apellidoMaterno);

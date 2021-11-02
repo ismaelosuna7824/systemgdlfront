@@ -54,7 +54,7 @@ export class AltaIdsComponent implements OnInit {
         nombres: emp[0].nombres?.toUpperCase(),
         nombreCompleto: `${emp[0].nombres?.toUpperCase()} ${emp[0].apellidos?.toUpperCase()}`,
         numSocial: emp[0].numSeguro?.toUpperCase(),
-        sd: "0",
+        sd: parseFloat(emp[0].costoDiario).toFixed(2),
         salarioInt: 0,
         curp: emp[0].curp?.toUpperCase(),
         rfc: emp[0].rfc?.toUpperCase(),

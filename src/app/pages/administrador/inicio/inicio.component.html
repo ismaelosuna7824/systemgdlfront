@@ -31,9 +31,9 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-3 col-md-12">
                                     <div>
-                                        <label for="first_name">Clientes | Registro Patronal</label>
+                                        <label for="first_name">Clientes</label>
                                         <ng-select [(ngModel)]="selectedEmp" [ngModelOptions]="{standalone: true}">
-                                            <ng-option *ngFor="let car of brokers" [value]="car._id">{{car.broker}} | {{car.registroPatronal.nombre}} </ng-option>
+                                            <ng-option *ngFor="let car of brokers" [value]="car._id">{{car.broker}} </ng-option>
                                          </ng-select>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@
                                 <label for="">Salario Diario <span style="color: red;">*</span></label>
                                 <input type="number" class="form-control" formControlName="sd">
                             </div>
-                            <div class="col-lg-3 col-md-12">
+                            <div class="col-lg-3 col-md-12" hidden>
                                 <label for="">Costo Diario <span style="color: red;">*</span></label>
                                 <input type="number" class="form-control" formControlName="costoDiario">
                             </div>
@@ -265,10 +265,13 @@
                             <div class="col-lg-3 col-md-12">
                                 <label for="">Tipo Afiliacion <span style="color: red;">*</span></label>
                                 <select name="" id="" class="form-select" formControlName="tipoAfiliacion">
-                                    <option value="APORTACIONES INFONAVID">APORTACIONES INFONAVID</option>
-                                    <option value="BAJA">BAJA</option>
-                                    <option value="NO VIGENTE">NO VIGENTE</option>
-                                    <option value="SOLO IMSS">SOLO IMSS</option>
+                                    <option *ngIf="tipoMovimientoEmp != 'ALTA'" value="APORTACIONES INFONAVID">APORTACIONES INFONAVID</option>
+                                    <option *ngIf="tipoMovimientoEmp != 'ALTA'" value="BAJA">BAJA</option>
+                                    <option *ngIf="tipoMovimientoEmp != 'ALTA'" value="NO VIGENTE">NO VIGENTE</option>
+                                    <option *ngIf="tipoMovimientoEmp != 'ALTA'" value="SOLO IMSS">SOLO IMSS</option>
+                                    <option *ngIf="tipoMovimientoEmp == 'ALTA'" value="Alta por Desempleo">Alta por Desempleo</option>
+                                    <option *ngIf="tipoMovimientoEmp == 'ALTA'" value="Alta Con Infonavit">Alta Con Infonavit</option>
+                                    <option *ngIf="tipoMovimientoEmp == 'ALTA'" value="Alta Solo IMSS"> Alta Solo IMSS</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-12">
