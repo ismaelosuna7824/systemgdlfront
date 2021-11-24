@@ -34,7 +34,7 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   });
 
   const wsClient = new WebSocketLink({
-    uri: `ws://localhost:2005/graphql`,
+    uri: `ws://149.28.67.198:2007/graphql`,
     options: {
       reconnect: true,
     },

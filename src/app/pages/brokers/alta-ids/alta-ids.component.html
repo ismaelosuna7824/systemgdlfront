@@ -93,9 +93,9 @@
                                     <th hidden class="border-bottom text-center">Identificador del Formato</th>
                                     <th hidden class="border-bottom text-center">Digíto identificador RP</th>
                                     <th hidden class="border-bottom text-center">Digíto identificador NSS</th>
-                                    <th *ngIf="tipoMovimiento == 'BAJA'" class="border-bottom text-center">Día de Desempleo</th>
-                                    <th *ngIf="tipoMovimiento == 'BAJA'" class="border-bottom text-center">Fecha de Baja</th>
-                                    <th *ngIf="tipoMovimiento == 'BAJA'"  class="border-bottom text-center">Causa de Baja</th>
+                                    <th class="border-bottom text-center">Día de Desempleo</th>
+                                    <th class="border-bottom text-center">Fecha de Baja</th>
+                                    <th class="border-bottom text-center">Causa de Baja</th>
                                     
                                     <th hidden class="border-bottom text-center">Eliminar</th>
                                 </tr>
@@ -168,7 +168,7 @@
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.identificadorFormato" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorRP" [ngModelOptions]="{standalone: true}"></td>
                                     <td hidden ><input onkeyup="this.value = this.value.toUpperCase();" type="text" class="form-control" [(ngModel)]="emp.digitoVerificadorNSS" [ngModelOptions]="{standalone: true}"></td>
-                                    <td *ngIf="tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
                                         <select name="" id="" class="form-select"  [(ngModel)]="emp.diaDesempleo" [ngModelOptions]="{standalone: true}" >
                                             <option value="0" hidden>0</option>
                                             <option value="1">1</option>
@@ -178,10 +178,10 @@
                                             
                                         </select>
                                     </td>
-                                    <td *ngIf="tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
                                         <input onkeyup="this.value = this.value.toUpperCase();" type="date" class="form-control" [(ngModel)]="emp.fechaBaja"   [ngModelOptions]="{standalone: true}">
                                     </td>
-                                    <td *ngIf="tipoMovimiento == 'BAJA'">
+                                    <td *ngIf="emp.tipoMovimiento == 'BAJA'">
                                         
                                            
                                             <select name="" id="" class="form-select" [(ngModel)]="emp.causaBaja"   [ngModelOptions]="{standalone: true}">
